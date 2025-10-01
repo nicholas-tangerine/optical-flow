@@ -2,4 +2,4 @@ look into TIF image libraries:
     TinyTIFF
     LibTIFF
 
-
+solve for each pixel iteratively before parallelizing
