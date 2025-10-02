@@ -2,7 +2,7 @@
 
 Preprocessor::Preprocessor(string beforeFile, string afterFile, double dt) {
     imgBefore = TIFFOpen(beforeFile, "r");
-    imgBefore = TIFFOpen(afterFile, "r");
+    imgAfter = TIFFOpen(afterFile, "r");
 }
 
 Preprocessor::~Preprocessor() {
