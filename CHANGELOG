@@ -5,4 +5,4 @@
 2025-10-02  Nicholas Tang  tangnicholas26@gmail.com
     * converted to C
     * trying libTIFF for now
-    * updated compiler command
+    * updated Makefile
