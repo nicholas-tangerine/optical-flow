@@ -1,5 +1,5 @@
 CC      := gcc
-CFLAGS  := -Wpedantic -Wall -Wextra -O2
+CFLAGS  := -Wpedantic -Wall -Wextra -g -O2
 LDFLAGS := -ltiff
 
 SRC     := main.c preprocessor.c

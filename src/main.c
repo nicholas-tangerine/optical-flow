@@ -4,7 +4,7 @@
 
 int main(int argc, char **argv) {
     if (argc < 4) {
-        printf("not enough params\n");
+        fprintf(stderr, "DEBUG: not enough params\n");
         exit(1);
     }
 
@@ -16,7 +16,12 @@ int main(int argc, char **argv) {
 
     printf("%d %d\n", imgDimensions[0], imgDimensions[1]);
 
+    /**
+     * FREE MEMORY
+     */
     deletePrepreprocessor(&preprocessorBefore);
     //deletePrepreprocessor(&preprocessorAfter);
+    free(imgDimensions);
+    imgDimensions = NULL;
     return 0;
 }
