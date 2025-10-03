@@ -1,6 +1,20 @@
-.PHONY : all
+CC      := gcc
+CFLAGS  := -Wpedantic -Wall -Wextra -O2
+LDFLAGS := -ltiff
 
-all : main
+SRC     := main.c preprocessor.c
+OBJ     := $(SRC:.c=.o)
+TARGET  := main
 
-main : main.cpp preprocessor.cpp
-	g++ main.cpp -o main preprocessor.cpp
+.PHONY: all clean
+
+all: $(TARGET)
+
+$(TARGET): $(OBJ)
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJ) $(TARGET)
