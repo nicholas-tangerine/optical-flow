@@ -19,20 +19,22 @@ void deletePrepreprocessor(Preprocessor **preprocessor) {
     *preprocessor = NULL;
 }
 
-void *getTags(Preprocessor *preprocessor, int tag) {
-    uint32_t count;
-    void *data;
-    int res = TIFFGetField(preprocessor->imgFileIn, tag, &count, &data);
+void getImgDimensions(Preprocessor *preprocessor, int *imgDimensions) {
+    uint32_t height;
+    uint32_t width;
 
-    if (res != 1) {
-        fprintf(stderr, "DEBUG: could not get TIFF tag");
+    int res1 = TIFFGetField(preprocessor->imgFileIn, TIFFTAG_IMAGELENGTH, &height);
+    int res2 = TIFFGetField(preprocessor->imgFileIn, TIFFTAG_IMAGEWIDTH, &width);
+
+    if (res1 != 1 || res2 != 1) {
+        fprintf(stderr, "DEBUG: could not get TIFF tag\n");
         exit(1);
     }
 
-    return data;
-}
+    imgDimensions[0] = (int) height;
+    imgDimensions[1] = (int) width;
 
-void printAllTags(Preprocessor *preprocessor) {
+    return;
 }
 
 char *getOutputName(char *fileName) {

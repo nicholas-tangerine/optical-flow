@@ -11,7 +11,10 @@ int main(int argc, char **argv) {
     Preprocessor *preprocessorBefore = createPreprocessor(argv[1]);
     //Preprocessor *preprocessorAfter = createPreprocessor(argv[2]);
     
-    printAllTags(preprocessorBefore);
+    int *imgDimensions = calloc(2, sizeof(int));
+    getImgDimensions(preprocessorBefore, imgDimensions);
+
+    printf("%d %d\n", imgDimensions[0], imgDimensions[1]);
 
     deletePrepreprocessor(&preprocessorBefore);
     //deletePrepreprocessor(&preprocessorAfter);

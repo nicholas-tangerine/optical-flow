@@ -25,27 +25,19 @@ Preprocessor *createPreprocessor(char *fileName);
 void deletePrepreprocessor(Preprocessor **preprocessor);
 
 /**
- * gets TIFF tags
+ * gets image dimensions in the form [height, width]
  *
- * @param tag               the tag index
- *
- * @return pointer to the data corresponding to the tag index
+ * @param preprocessor      preprocessor struct holding TIFF img
+ * @param imgDimensions     pointer to int array to hold dimensions
  */
-void *getTags(Preprocessor *preprocessor, int tag);
-
-/**
- * prints all the tags in the TIFF file associated with preprocessor struct
- *
- * @param preprocessor      preprocessor struct
- */
-void printAllTags(Preprocessor *preprocessor);
+void getImgDimensions(Preprocessor *preprocessor, int *imgDimensions);
 
 /**
  * applies gaussian blur to image
  *
  * @param sigma             standard deviation
  */
-void applyGaussianFilter();
+void applyGaussianBlur(double sigma);
 
 /**
  * normalizes image intensity, pixels range from 0 to 1

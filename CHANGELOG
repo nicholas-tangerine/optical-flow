@@ -6,3 +6,4 @@
     * converted to C
     * trying libTIFF for now
     * updated Makefile
+    * added get image dimensions functionality to preprocessor
