@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
      */
     freeImg(&imgBefore);
     //freeImg(&imgAfter);
+    
     free(imgDimensions);
     imgDimensions = NULL;
 
