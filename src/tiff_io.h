@@ -6,14 +6,14 @@
 /**
  * Standardize function naming scheme
  */
-#define openImg(fileName,mode) TIFFOpen(fileName,mode)
+#define openImg(fileName, mode) TIFFOpen(fileName, mode)
 
 /**
- * Takes pointer to TIFF and frees memory. Sets ptr to NULL
+ * Takes pointer to addr of TIFF and frees memory. Sets ptr to NULL
  *
- * @param tif               pointer to TIFF
+ * @param tif               pointer to addr of TIFF
  */
-void freeImg(TIFF *tif);
+void freeImg(TIFF **tif);
 
 /**
  * Takes ptr to TIFF and updates imgDimensions to [height, width]

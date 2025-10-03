@@ -5,7 +5,7 @@
  * returns output file name
  * must be freed by user
  *
- * @param fileName          name of file
+ * @param fileName          name of file of form <fileName>.<extension>
  *
  * @return <fileName>_processed.<extension>
  */

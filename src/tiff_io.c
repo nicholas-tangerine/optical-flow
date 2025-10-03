@@ -1,4 +1,6 @@
-#include "tiffIO.h"
+#include <stdlib.h>
+
+#include "tiff_io.h"
 
 void freeImg(TIFF **tif) {
     TIFFClose(*tif);

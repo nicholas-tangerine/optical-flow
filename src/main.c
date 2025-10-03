@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "preprocessor.h"
+#include "tiff_io.h"
 
 int main(int argc, char **argv) {
     if (argc < 4) {
@@ -8,20 +8,21 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    Preprocessor *preprocessorBefore = createPreprocessor(argv[1]);
-    //Preprocessor *preprocessorAfter = createPreprocessor(argv[2]);
+    TIFF *imgBefore = openImg(argv[1], "r");
+    //TIFF *imgAfter = openImg(argv[2], "w");
     
     int *imgDimensions = calloc(2, sizeof(int));
-    getImgDimensions(preprocessorBefore, imgDimensions);
+    getImgDimensions(imgBefore, imgDimensions);
 
     printf("%d %d\n", imgDimensions[0], imgDimensions[1]);
 
     /**
      * FREE MEMORY
      */
-    deletePrepreprocessor(&preprocessorBefore);
-    //deletePrepreprocessor(&preprocessorAfter);
+    freeImg(&imgBefore);
+    //freeImg(&imgAfter);
     free(imgDimensions);
     imgDimensions = NULL;
+
     return 0;
 }

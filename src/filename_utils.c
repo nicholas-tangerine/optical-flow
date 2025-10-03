@@ -1,12 +1,14 @@
 #include "filename_utils.h"
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 char *getOutputName(char *inputName) {
     char *extension = strrchr(inputName, '.');
 
     if (strcmp(extension, ".tif") != 0) {
-        printf("DEBUG: unrecognized file, must be .tif\n");
+        fprintf(stderr, "DEBUG: unrecognized file, must be .tif\n");
         exit(1);
     }
 
