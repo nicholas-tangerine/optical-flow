@@ -1,16 +1,18 @@
 #ifndef PREPROCESSOR_H
 #define PREPROCESSOR_H
 
+#include "tiffio.h"
+
 /**
- * applies gaussian blur to image
+ * Applies Gaussian blur to image
  *
  * @param sigma             standard deviation
  */
-void applyGaussianBlur(double sigma);
+void applyGaussianBlur(TIFF *tif, double sigma);
 
 /**
- * normalizes image intensity, pixels range from 0 to 1
+ * Normalizes image intensity, pixels range from 0 to 1
  */
-void normalize();
+void normalize(TIFF *tif);
 
 #endif
