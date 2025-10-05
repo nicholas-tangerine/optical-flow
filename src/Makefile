@@ -6,6 +6,8 @@ SRC     := main.c preprocessor.c tiff_io.c filename_utils.c debug_utils.c
 OBJ     := $(SRC:.c=.o)
 TARGET  := main
 
+MISC	:= *.ppm
+
 .PHONY: all clean
 
 all: $(TARGET)
@@ -17,4 +19,4 @@ $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f $(OBJ) $(TARGET) $(MISC)

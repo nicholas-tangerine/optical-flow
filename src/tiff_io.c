@@ -37,7 +37,7 @@ void getImgDimensions(TIFF *tif, uint32_t *imgDimensions) {
     int res2 = TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
 
     if (res1 != 1 || res2 != 1) {
-        fprintf(stderr, "DEBUG: no widthor no width tab\n");
+        fprintf(stderr, "DEBUG: no width or no height tag in image\n");
         exit(1);
     }
 
