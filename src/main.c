@@ -21,27 +21,28 @@ int main(int argc, char **argv) {
 
     getImgDimensions(imgBefore, imgDimensions);
     int height = imgDimensions[0];
-    int length = imgDimensions[1];
+    int width = imgDimensions[1];
 
     FILE *fp = fopen("output.ppm", "wb");
     if (fp == NULL) {
-        fprintf(stderr, "error opening file\n");
+        fprintf(stderr, "DEBUG: error opening file\n");
         exit(1);
     }
 
-    fprintf(fp, "P6\n%d %d\n%d\n", length, height, 255);
+    fprintf(fp, "P6\n%d %d\n%d\n", width , height, 255);
 
     for (int y = 0; y < height; y++) {
-        for (int x = 0; x < length; x++) {
-            int index = y * height + x;
+        for (int x = 0; x < width ; x++) {
+            int index = y * width + x;
             int bufferVal = bufferBefore[index];
 
-            unsigned int r = (unsigned int)(0xff&(bufferVal >> 6));
-            unsigned int g = (unsigned int)(0xff&(bufferVal >> 4));
-            unsigned int b = (unsigned int)(0xff&(bufferVal >> 2));
+            unsigned int r = (unsigned int)(0xff&(bufferVal >> 24));
+            unsigned int g = (unsigned int)(0xff&(bufferVal >> 16));
+            unsigned int b = (unsigned int)(0xff&(bufferVal >> 8));
             unsigned int a = (unsigned int)(0xff&(bufferVal >> 0));
 
-            unsigned int avg = (r + g + b + a) >> 2;    // divide by 4
+            unsigned int avg = (r + g + b + a) >> 2;    // divide by 4 to get
+                                                        // avg
 
 
             fputc(avg, fp);

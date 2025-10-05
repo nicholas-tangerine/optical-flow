@@ -8,6 +8,26 @@ void freeImg(TIFF **tif) {
     return;
 }
 
+int *readTiffToBuffer(TIFF *tif) {
+    int *imgDimensions = calloc(2, sizeof(int));
+    getImgDimensions(tif, imgDimensions);
+
+    int height = imgDimensions[0];
+    int length = imgDimensions[1];
+
+    int *buffer = (int *) calloc(height * length, sizeof(int));
+
+    int res = TIFFReadRGBAImageOriented(tif, length, height, buffer, ORIENTATION_TOPLEFT, 0);
+
+    if (res != 1) {
+        fprintf(stderr, "DEBUG: error reading TIFF into buffer");
+        exit(1);
+    }
+    
+    free(imgDimensions);
+    return buffer;
+}
+
 void getImgDimensions(TIFF *tif, int *imgDimensions) {
     uint32_t height;
     uint32_t width;
