@@ -17,6 +17,10 @@ char *getOutputName(char *inputName) {
 
     char *output = calloc(baseLen + (int) strlen(suffix) + 1,
             sizeof(char));
+    if (output == NULL) {
+        fprintf(stderr, "DEBUG: couldn't allocate space for new filename\n");
+        exit(1);
+    }
     strncpy(output, inputName, baseLen);
     output[baseLen] = '\0';
     strcat(output, suffix);

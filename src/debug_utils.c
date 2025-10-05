@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "tiff_io.h"
+#include "tiff_helpers.h"
 
-void writeBufferToPPM(uint32_t width, uint32_t height, uint32_t *buffer, char *outputFile) {
+void writeImageToPPM(uint32_t width, uint32_t height, uint32_t *buffer, char *outputFile) {
     if (strcmp(outputFile, "") == 0) outputFile = "output.ppm";
 
     FILE *fp = fopen(outputFile, "wb");

@@ -1,0 +1,33 @@
+#ifndef TIFFIO_H
+#define TIFFIO_H
+
+#include "tiffio.h"
+
+/**
+ * Writes RGBA image data to buffer
+ *
+ * @param tif               pointer to TIFF struct
+ * @param buffer            
+ * 
+ * @return 2d int array
+ */
+void readTIFFToBuffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width);
+
+/**
+ * Returns height of TIFF
+ *
+ * @param tif               pointer to TIFF struct
+ *
+ * @return height of TIFF
+ */
+uint32_t getTIFFHeight(TIFF *tif);
+
+/**
+ * Returns width of TIFF
+ *
+ * @param tif               pointer to TIFF struct
+ *
+ * @return width of TIFF
+ */
+uint32_t getTIFFWidth(TIFF *tif);
+#endif
