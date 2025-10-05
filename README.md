@@ -1,6 +1,10 @@
 # Optical Flow Method
 Optical flow for planetary cloud tracking
 
+# Objective
+Use two images taken $\Delta t$ apart and track the wind velocity patterns.
+Purely algorithmic, no AI/ML.
+
 # Implementation Details
 ![code flowchart](/docs/images/flowchart.png)
 
