@@ -22,7 +22,7 @@ void freeImg(TIFF **tif);
  * 
  * @return 2d int array
  */
-int *readTiffToBuffer(TIFF *tif);
+uint32_t *readTiffToBuffer(TIFF *tif);
 
 /**
  * Takes ptr to TIFF and updates imgDimensions to [height, width]
@@ -30,6 +30,6 @@ int *readTiffToBuffer(TIFF *tif);
  * @param tif               pointer to TIFF
  * @param imgDimensions     int array to hold dimensions
  */
-void getImgDimensions(TIFF *tif, int *imgDimensions);
+void getImgDimensions(TIFF *tif, uint32_t *imgDimensions);
 
 #endif
