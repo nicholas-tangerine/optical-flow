@@ -12,8 +12,8 @@
 void apply_gaussian_blur(uint32_t *buffer, double sigma);
 
 /**
- * Normalizes image intensity, pixels range from 0 to 255
+ * Normalizes image intensity, pixels range from 0 to 1
  */
-void normalize(TIFF *tif);
+void intensity_normalize(float *buffer, uint32_t height, uint32_t width);
 
 #endif

@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "tiff_helpers.h"
 
-void write_image_to_ppm(uint32_t width, uint32_t height, uint32_t *buffer, char *output_file) {
+void write_color_buffer_to_ppm(uint32_t *buffer, uint32_t width, uint32_t height, char *output_file) {
     if (strcmp(output_file, "") == 0) output_file = "output.ppm";
 
     FILE *fp = fopen(output_file, "wb");
@@ -33,6 +34,34 @@ void write_image_to_ppm(uint32_t width, uint32_t height, uint32_t *buffer, char 
             fputc(r, fp);
             fputc(g, fp);
             fputc(b, fp);
+        }
+    }
+
+    fclose(fp);
+    fp = NULL;
+
+    return;
+}
+
+void write_intensity_buffer_to_ppm(float *buffer, uint32_t width, uint32_t height, char *output_file) {
+    if (strcmp(output_file, "") == 0) output_file = "output.ppm";
+
+    FILE *fp = fopen(output_file, "wb");
+    if (fp == NULL) {
+        fprintf(stderr, "DEBUG: error opening file\n");
+        return;
+    }
+
+    fprintf(fp, "P5\n%d %d\n%d\n", width , height, 255);
+    
+    for (uint32_t y = 0; y < height; y++) {
+        for (uint32_t x = 0; x < width ; x++) {
+            int index = y * width + x;
+            float buffer_val = buffer[index];
+
+            unsigned char intensity = (unsigned char) (buffer_val * 255.0f);
+
+            fputc(intensity, fp);
         }
     }
 

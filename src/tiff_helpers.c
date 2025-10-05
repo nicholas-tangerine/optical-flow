@@ -1,5 +1,7 @@
 #include <stdlib.h>
 
+#include "tiffio.h"
+
 #include "tiff_helpers.h"
 
 
@@ -26,20 +28,24 @@ void tiff_read_to_intensity_buffer(TIFF *tif, float *buffer, uint32_t height, ui
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width; x++) {
             int index = y * width + x;
-            int temp_buffer_val = temp_buffer[index];
+            uint32_t temp_buffer_val = temp_buffer[index];
 
             unsigned int r = TIFFGetR(temp_buffer_val);
             unsigned int g = TIFFGetG(temp_buffer_val);
             unsigned int b = TIFFGetB(temp_buffer_val);
             unsigned int a = TIFFGetA(temp_buffer_val);
 
-            float alpha = a / 255.0;        //  scaled between 0 and 1
+            float avg_color = (r + g + b) / 3.0f;
+            float alpha_frac = a / 255.0f;
+            float intensity = (avg_color * alpha_frac) / 255.0f;
 
-            float avg = (r + g + b) * alpha / 3;
+            if (intensity < 0.0f) intensity = 0.0f;
+            if (intensity > 1.0f) intensity = 1.0f;
 
-            buffer[index] = avg;
+            buffer[index] = intensity;
         }
     }
+
 
     free(temp_buffer);
 }
