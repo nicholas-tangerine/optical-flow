@@ -8,15 +8,7 @@ void freeImg(TIFF **tif) {
     return;
 }
 
-uint32_t *readTiffToBuffer(TIFF *tif) {
-    uint32_t *imgDimensions = calloc(2, sizeof(int));
-    getImgDimensions(tif, imgDimensions);
-
-    uint32_t height = imgDimensions[0];
-    uint32_t width = imgDimensions[1];
-
-    uint32_t *buffer = (uint32_t *) calloc(height * width, sizeof(uint32_t));
-
+uint32_t *readTiffToBuffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width) {
     int res = TIFFReadRGBAImageOriented(tif, width, height, buffer,
             ORIENTATION_TOPLEFT, 0);
 
@@ -24,25 +16,18 @@ uint32_t *readTiffToBuffer(TIFF *tif) {
         fprintf(stderr, "DEBUG: error reading TIFF into buffer");
         exit(1);
     }
-    
-    free(imgDimensions);
+
     return buffer;
 }
 
-void getImgDimensions(TIFF *tif, uint32_t *imgDimensions) {
-    uint32_t height;
-    uint32_t width;
-
-    int res1 = TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
-    int res2 = TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
+void getImgDimensions(TIFF *tif, uint32_t *imgHeight, uint32_t *imgWidth) {
+    int res1 = TIFFGetField(tif, TIFFTAG_IMAGELENGTH, imgHeight);
+    int res2 = TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, imgWidth);
 
     if (res1 != 1 || res2 != 1) {
         fprintf(stderr, "DEBUG: no width or no height tag in image\n");
         exit(1);
     }
-
-    imgDimensions[0] = height;
-    imgDimensions[1] = width;
 
     return;
 

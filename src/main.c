@@ -14,22 +14,24 @@ int main(int argc, char **argv) {
     TIFF *imgBefore = openImg(argv[1], "r");
     TIFF *imgAfter = openImg(argv[2], "r");
 
-    uint32_t *bufferBefore = readTiffToBuffer(imgBefore);
-    uint32_t *bufferAfter = readTiffToBuffer(imgAfter);
+    uint32_t imgBeforeHeight, imgBeforeWidth, imgAfterHeight, imgAfterWidth;
+    getImgDimensions(imgBefore, &imgBeforeHeight, &imgBeforeWidth);
+    getImgDimensions(imgAfter, &imgAfterHeight, &imgAfterWidth);
 
-    uint32_t *imgDimensionsBefore = calloc(2, sizeof(uint32_t));
-    uint32_t *imgDimensionsAfter= calloc(2, sizeof(uint32_t));
-
-    getImgDimensions(imgBefore, imgDimensionsBefore);
-    getImgDimensions(imgAfter, imgDimensionsAfter);
-
-    if (imgDimensionsBefore[0] != imgDimensionsAfter[0] || imgDimensionsBefore[1] != imgDimensionsAfter[1]) {
-        fprintf(stderr, "DEBUG: before and after images do not have the same dimensions");
+    if (imgBeforeHeight != imgAfterHeight || imgBeforeWidth != imgAfterWidth) {
+        fprintf(stderr, "DEBUG: before and after images do not have the same \
+                dimensions");
         exit(1);
     }
 
-    uint32_t height = imgDimensionsBefore[0];
-    uint32_t width = imgDimensionsBefore[1];
+    uint32_t height = imgBeforeHeight;
+    uint32_t width = imgBeforeWidth;
+
+    uint32_t *bufferBefore = calloc(height * width, sizeof(uint32_t));
+    uint32_t *bufferAfter = calloc(height * width, sizeof(uint32_t));
+
+    readTiffToBuffer(imgBefore, bufferBefore, height, width);
+    readTiffToBuffer(imgAfter, bufferAfter, height, width);
 
     writeBufferToPPM(width, height, bufferBefore, "output1.ppm");
     writeBufferToPPM(width, height, bufferAfter, "output2.ppm");
@@ -37,6 +39,7 @@ int main(int argc, char **argv) {
     /**
      * FREE MEMORY
      */
+
     free(bufferBefore);
     free(bufferAfter);
 

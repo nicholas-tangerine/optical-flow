@@ -36,5 +36,8 @@ void writeBufferToPPM(uint32_t width, uint32_t height, uint32_t *buffer, char *o
         }
     }
 
+    fclose(fp);
+    fp = NULL;
+
     return;
 }

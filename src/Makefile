@@ -1,5 +1,5 @@
 CC      := gcc
-CFLAGS  := -Wpedantic -Wall -Wextra -g -O2
+CFLAGS  := -Wpedantic -Wall -Wextra -ggdb3 -O2
 LDFLAGS := -ltiff
 
 SRC     := main.c preprocessor.c tiff_io.c filename_utils.c debug_utils.c
