@@ -4,14 +4,24 @@
 #include "tiffio.h"
 
 /**
- * Writes RGBA image data to buffer
+ * Writes RGBA image data to buffer. Saves RGBA (0 - 255)
  *
  * @param tif               pointer to TIFF struct
  * @param buffer            
  * 
  * @return 2d int array
  */
-void tiff_read_to_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width);
+void tiff_read_to_color_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width);
+
+/**
+ * Writes RGBA image data to buffer. Saves B/W (0 - 1)
+ *
+ * @param tif               pointer to TIFF struct
+ * @param buffer            
+ * 
+ * @return 2d int array
+ */
+void tiff_read_to_intensity_buffer(TIFF *tif, float *buffer, uint32_t height, uint32_t width);
 
 /**
  * Returns height of TIFF

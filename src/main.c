@@ -20,8 +20,8 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    write_image_to_ppm(img_before->width, img_before->height, img_before->buffer, "output1.ppm");
-    write_image_to_ppm(img_after->width, img_after->height, img_after->buffer, "output2.ppm");
+    write_image_to_ppm(img_before->width, img_before->height, img_before->color_buffer, "output1.ppm");
+    write_image_to_ppm(img_after->width, img_after->height, img_after->color_buffer, "output2.ppm");
 
     /**
      * FREE MEMORY

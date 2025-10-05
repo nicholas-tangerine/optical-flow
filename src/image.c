@@ -14,8 +14,11 @@ image_t *image_init(char *file_name, char *mode) {
     img->width = tiff_get_width(img->tif);
     img->read = strcmp(mode, "r") == 0 ? true : false;
 
-    img->buffer = (uint32_t *) calloc(img->height * img->width, sizeof(uint32_t));
-    tiff_read_to_buffer(img->tif, img->buffer, img->height, img->width);
+    img->color_buffer = (uint32_t *) calloc(img->height * img->width, sizeof(uint32_t));
+    img->intensity_buffer = (float *) calloc(img->height * img->width, sizeof(float));
+
+    tiff_read_to_color_buffer(img->tif, img->color_buffer, img->height, img->width);
+    tiff_read_to_intensity_buffer(img->tif, img->intensity_buffer, img->height, img->width);
 
     return img;
 }
@@ -26,8 +29,8 @@ void image_free(image_t **img) {
     }
     TIFFClose((*img)->tif);
 
-    free((*img)->buffer);
-    (*img)->buffer = NULL;
+    free((*img)->color_buffer);
+    (*img)->color_buffer = NULL;
 
     free(*img);
     *img = NULL;

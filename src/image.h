@@ -4,7 +4,8 @@
 
 typedef struct {
     TIFF *tif;
-    uint32_t *buffer;
+    uint32_t *color_buffer;
+    float *intensity_buffer;
     uint32_t height;
     uint32_t width;
     bool read;
@@ -12,7 +13,7 @@ typedef struct {
 } image_t;
 
 /**
- * Initializes image struct. Returns pointer to image struct which must be
+ * Initializes image struct. Returns pointer to image struct which should be
  * freed by calling image_free(image_t **img).
  *
  * @param file_name            name of image file

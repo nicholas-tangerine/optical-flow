@@ -3,7 +3,7 @@
 #include "tiff_helpers.h"
 
 
-void tiff_read_to_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width) {
+void tiff_read_to_color_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width) {
     int res = TIFFReadRGBAImageOriented(tif, width, height, buffer,
             ORIENTATION_TOPLEFT, 0);
 
@@ -11,6 +11,37 @@ void tiff_read_to_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t 
         fprintf(stderr, "DEBUG: error reading TIFF into buffer");
         return;
     }
+}
+
+void tiff_read_to_intensity_buffer(TIFF *tif, float *buffer, uint32_t height, uint32_t width) {
+    uint32_t *temp_buffer = calloc(height * width, sizeof(uint32_t));
+    int res = TIFFReadRGBAImageOriented(tif, width, height, temp_buffer,
+            ORIENTATION_TOPLEFT, 0);
+
+    if (res != 1) {
+        fprintf(stderr, "DEBUG: error reading TIFF into temp buffer\n");
+        return;
+    }
+
+    for (uint32_t y = 0; y < height; y++) {
+        for (uint32_t x = 0; x < width; x++) {
+            int index = y * width + x;
+            int temp_buffer_val = temp_buffer[index];
+
+            unsigned int r = TIFFGetR(temp_buffer_val);
+            unsigned int g = TIFFGetG(temp_buffer_val);
+            unsigned int b = TIFFGetB(temp_buffer_val);
+            unsigned int a = TIFFGetA(temp_buffer_val);
+
+            float alpha = a / 255.0;        //  scaled between 0 and 1
+
+            float avg = (r + g + b) * alpha / 3;
+
+            buffer[index] = avg;
+        }
+    }
+
+    free(temp_buffer);
 }
 
 uint32_t tiff_get_height(TIFF *tif) {
