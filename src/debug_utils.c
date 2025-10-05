@@ -19,17 +19,20 @@ void writeBufferToPPM(uint32_t width, uint32_t height, uint32_t *buffer, char *o
             int index = y * width + x;
             int bufferVal = buffer[index];
 
-            unsigned int r = (unsigned int)(0xff&(bufferVal >> 24));
-            unsigned int g = (unsigned int)(0xff&(bufferVal >> 16));
-            unsigned int b = (unsigned int)(0xff&(bufferVal >> 8));
-            unsigned int a = (unsigned int)(0xff&(bufferVal >> 0));
+            unsigned int r = TIFFGetR(bufferVal);
+            unsigned int g = TIFFGetG(bufferVal);
+            unsigned int b = TIFFGetB(bufferVal);
+            unsigned int a = TIFFGetA(bufferVal);
 
-            unsigned int avg = (r + g + b + a) >> 2;    // divide by 4 to get
-                                                        // avg
+            float alpha = a / 256.0;
 
-            fputc(avg, fp);
-            fputc(avg, fp);
-            fputc(avg, fp);
+            r = (unsigned int) (r * alpha);
+            g = (unsigned int) (g * alpha);
+            b = (unsigned int) (b * alpha);
+
+            fputc(r, fp);
+            fputc(g, fp);
+            fputc(b, fp);
         }
     }
 
