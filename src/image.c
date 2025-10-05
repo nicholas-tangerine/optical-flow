@@ -4,23 +4,23 @@
 #include "image.h"
 #include "tiff_helpers.h"
 
-Image *initImage(char *fileName, char *mode) {
+image_t *image_init(char *file_name, char *mode) {
     //  Allocate img
-    Image *img = calloc(1, sizeof(Image));
+    image_t *img = calloc(1, sizeof(image_t));
 
     //  Initialize fields
-    img->tif = TIFFOpen(fileName, mode);
-    img->height = getTIFFHeight(img->tif);
-    img->width = getTIFFWidth(img->tif);
+    img->tif = TIFFOpen(file_name, mode);
+    img->height = tiff_get_height(img->tif);
+    img->width = tiff_get_width(img->tif);
     img->read = strcmp(mode, "r") == 0 ? true : false;
 
     img->buffer = (uint32_t *) calloc(img->height * img->width, sizeof(uint32_t));
-    readTIFFToBuffer(img->tif, img->buffer, img->height, img->width);
+    tiff_read_to_buffer(img->tif, img->buffer, img->height, img->width);
 
     return img;
 }
 
-void freeImage(Image **img) {
+void image_free(image_t **img) {
     TIFFClose((*img)->tif);
 
     free((*img)->buffer);
@@ -32,7 +32,7 @@ void freeImage(Image **img) {
     return;
 }
 
-bool sameDimensions(Image *img1, Image *img2) {
+bool image_same_dimensions(image_t *img1, image_t *img2) {
     uint32_t height1, width1, height2, width2;
     height1 = img1->height;
     width1 = img1->width;

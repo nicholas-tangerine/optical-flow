@@ -11,7 +11,7 @@
  * 
  * @return 2d int array
  */
-void readTIFFToBuffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width);
+void tiff_read_to_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width);
 
 /**
  * Returns height of TIFF
@@ -20,7 +20,7 @@ void readTIFFToBuffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t wid
  *
  * @return height of TIFF
  */
-uint32_t getTIFFHeight(TIFF *tif);
+uint32_t tiff_get_height(TIFF *tif);
 
 /**
  * Returns width of TIFF
@@ -29,5 +29,5 @@ uint32_t getTIFFHeight(TIFF *tif);
  *
  * @return width of TIFF
  */
-uint32_t getTIFFWidth(TIFF *tif);
+uint32_t tiff_get_width(TIFF *tif);
 #endif

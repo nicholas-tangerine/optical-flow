@@ -4,6 +4,6 @@
  * @param width             image width (pixels)
  * @param height            image height (pixels)
  * @param buffer            image data in int array
- * @param outputFile        name of output file (.ppm)
+ * @param output_file       name of output file (.ppm)
  */
-void writeImageToPPM(uint32_t width, uint32_t height, uint32_t *buffer, char *outputFile);
+void write_image_to_ppm(uint32_t width, uint32_t height, uint32_t *buffer, char *output_file);

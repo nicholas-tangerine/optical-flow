@@ -5,10 +5,10 @@
  * returns output file name
  * must be freed by user
  *
- * @param fileName          name of file of form <fileName>.<extension>
+ * @param file_name          name of file of form <file_name>.<extension>
  *
- * @return <fileName>_processed.<extension>
+ * @return <file_name>_processed.<extension>
  */
-char *getOutputName(char *inputName);
+char *get_output_name(char *input_name);
 
 #endif

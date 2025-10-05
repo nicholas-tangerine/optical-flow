@@ -9,7 +9,7 @@
  * @param buffer            RGBA image data in uint32_t buffer
  * @param sigma             standard deviation
  */
-void applyGaussianBlur(uint32_t *buffer, double sigma);
+void apply_gaussian_blur(uint32_t *buffer, double sigma);
 
 /**
  * Normalizes image intensity, pixels range from 0 to 255

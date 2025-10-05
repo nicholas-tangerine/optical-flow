@@ -3,7 +3,7 @@
 #include "tiff_helpers.h"
 
 
-void readTIFFToBuffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width) {
+void tiff_read_to_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width) {
     int res = TIFFReadRGBAImageOriented(tif, width, height, buffer,
             ORIENTATION_TOPLEFT, 0);
 
@@ -13,7 +13,7 @@ void readTIFFToBuffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t wid
     }
 }
 
-uint32_t getTIFFHeight(TIFF *tif) {
+uint32_t tiff_get_height(TIFF *tif) {
     uint32_t height;
 
     int res = TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
@@ -26,7 +26,7 @@ uint32_t getTIFFHeight(TIFF *tif) {
     return height;
 }
 
-uint32_t getTIFFWidth(TIFF *tif) {
+uint32_t tiff_get_width(TIFF *tif) {
     uint32_t width;
 
     int res = TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);

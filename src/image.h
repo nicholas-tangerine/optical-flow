@@ -9,31 +9,31 @@ typedef struct {
     uint32_t width;
     bool read;
 
-} Image;
+} image_t;
 
 /**
  * Initializes image struct. Returns pointer to image struct which must be
- * freed by calling freeImage(Image **img).
+ * freed by calling image_free(image_t **img).
  *
- * @param fileName              name of image file
+ * @param file_name            name of image file
  *
- * @return image                pointer to image struct
+ * @return image               pointer to image struct
  */
-Image *initImage(char *fileName, char *mode);
+image_t *image_init(char *file_name, char *mode);
 
 /**
  * Frees all memory and sets image pointer to NULL
  * 
- * @param img                   pointer to addr of Image
+ * @param img                   pointer to addr of image_t
  */
-void freeImage(Image **img);
+void image_free(image_t **img);
 
 /**
- * Checks whether two Image structs have the same dimensions
+ * Checks whether two image_t structs have the same dimensions
  * 
  * @param img1
  * @param img2
  *
  * @return true if dimensions are equal
  */
-bool sameDimensions(Image *img1, Image *img2);
+bool image_same_dimensions(image_t *img1, image_t *img2);

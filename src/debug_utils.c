@@ -3,10 +3,10 @@
 
 #include "tiff_helpers.h"
 
-void writeImageToPPM(uint32_t width, uint32_t height, uint32_t *buffer, char *outputFile) {
-    if (strcmp(outputFile, "") == 0) outputFile = "output.ppm";
+void write_image_to_ppm(uint32_t width, uint32_t height, uint32_t *buffer, char *output_file) {
+    if (strcmp(output_file, "") == 0) output_file = "output.ppm";
 
-    FILE *fp = fopen(outputFile, "wb");
+    FILE *fp = fopen(output_file, "wb");
     if (fp == NULL) {
         fprintf(stderr, "DEBUG: error opening file\n");
         exit(1);
@@ -17,12 +17,12 @@ void writeImageToPPM(uint32_t width, uint32_t height, uint32_t *buffer, char *ou
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width ; x++) {
             int index = y * width + x;
-            int bufferVal = buffer[index];
+            int buffer_val = buffer[index];
 
-            unsigned int r = TIFFGetR(bufferVal);
-            unsigned int g = TIFFGetG(bufferVal);
-            unsigned int b = TIFFGetB(bufferVal);
-            unsigned int a = TIFFGetA(bufferVal);
+            unsigned int r = TIFFGetR(buffer_val);
+            unsigned int g = TIFFGetG(buffer_val);
+            unsigned int b = TIFFGetB(buffer_val);
+            unsigned int a = TIFFGetA(buffer_val);
 
             float alpha = a / 256.0;
 
