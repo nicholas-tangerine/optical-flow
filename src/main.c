@@ -9,7 +9,7 @@
 int main(int argc, char **argv) {
     if (argc < 4) {
         fprintf(stderr, "DEBUG: not enough params\n");
-        exit(1);
+        return 1;
     }
 
     image_t *img_before = image_init(argv[1], "r");
@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
 
     if (!image_same_dimensions(img_before, img_after)) {
         fprintf(stderr, "DEBUG: before and after images do not have the same dimensions\n");
-        exit (1);
+        return 1;
     }
 
     write_image_to_ppm(img_before->width, img_before->height, img_before->buffer, "output1.ppm");

@@ -9,7 +9,7 @@ void tiff_read_to_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t 
 
     if (res != 1) {
         fprintf(stderr, "DEBUG: error reading TIFF into buffer");
-        exit(1);
+        return;
     }
 }
 
@@ -21,8 +21,6 @@ uint32_t tiff_get_height(TIFF *tif) {
     if (res == 1) return height;
 
     fprintf(stderr, "DEBUG: couldn't get TIFF height\n");
-    exit(1);
-
     return height;
 }
 
@@ -34,7 +32,5 @@ uint32_t tiff_get_width(TIFF *tif) {
     if (res == 1) return width;
 
     fprintf(stderr, "DEBUG: couldn't get TIFF width\n");
-    exit(1);
-
     return width;
 }

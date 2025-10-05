@@ -9,7 +9,7 @@ void write_image_to_ppm(uint32_t width, uint32_t height, uint32_t *buffer, char 
     FILE *fp = fopen(output_file, "wb");
     if (fp == NULL) {
         fprintf(stderr, "DEBUG: error opening file\n");
-        exit(1);
+        return;
     }
 
     fprintf(fp, "P6\n%d %d\n%d\n", width , height, 255);
@@ -24,7 +24,7 @@ void write_image_to_ppm(uint32_t width, uint32_t height, uint32_t *buffer, char 
             unsigned int b = TIFFGetB(buffer_val);
             unsigned int a = TIFFGetA(buffer_val);
 
-            float alpha = a / 256.0;
+            float alpha = a / 255.0;        //  scaled between 0 and 1
 
             r = (unsigned int) (r * alpha);
             g = (unsigned int) (g * alpha);

@@ -21,6 +21,9 @@ image_t *image_init(char *file_name, char *mode) {
 }
 
 void image_free(image_t **img) {
+    if (!(*img)->read) {
+        fprintf(stderr, "DEBUG: freeing a write file. use image_flush instead\n");
+    }
     TIFFClose((*img)->tif);
 
     free((*img)->buffer);
