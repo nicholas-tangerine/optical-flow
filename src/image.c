@@ -32,6 +32,9 @@ void image_free(image_t **img) {
     free((*img)->color_buffer);
     (*img)->color_buffer = NULL;
 
+    free((*img)->intensity_buffer);
+    (*img)->intensity_buffer = NULL;
+
     free(*img);
     *img = NULL;
 
