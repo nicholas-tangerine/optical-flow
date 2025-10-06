@@ -25,6 +25,8 @@ int main(int argc, char **argv) {
     
     intensity_smooth(&(img_before->intensity_buffer), img_before->width, img_before->height, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
 
+    write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "output.ppm");
+
 
     /**
      * FREE MEMORY
