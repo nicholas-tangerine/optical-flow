@@ -6,7 +6,7 @@
 
 #include "debug_utils.h"
 
-#define GAUSSIAN_SMOOTH_SIGMA 3
+#define GAUSSIAN_SMOOTH_SIGMA 5
 #define GAUSSIAN_SMOOTH_RADIUS 3*GAUSSIAN_SMOOTH_SIGMA
 
 int main(int argc, char **argv) {

@@ -1,18 +1,24 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
 #include "math_helper.h"
 
 void gaussian_dist_1d(float *weights, uint32_t radius, float sigma) {
     uint32_t side_len = 2 * radius + 1;
-    float fraction = pow((sigma * sqrtf(2.0f * M_PI)), -1);
+    float fraction = 1.0f / (sigma * sqrtf(2.0f * M_PI));
     float exponent;
 
     for (uint32_t i = 0; i < side_len; i++) {
-        exponent = expf(-0.5f * pow(((i - radius) / sigma), 2));
+        exponent = expf(-0.5f * pow((((int)i - (int)radius) / sigma), 2));
 
         weights[i] = fraction * exponent;
     }
+
+    //  SCALE TO SUM TO 1.0
+    float total = 0.0f;
+    for (uint32_t i = 0; i < side_len; i++) total += weights[i];
+    for (uint32_t i = 0; i < side_len; i++) weights[i] /= total;
 
     return;
 }
