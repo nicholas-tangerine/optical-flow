@@ -20,12 +20,17 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "color output1.ppm");
+    write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "intensity output1.ppm");
+    write_intensity_buffer_to_ppm(img_after->intensity_buffer, img_after->width, img_after->height, "intensity output2.ppm");
 
-    
+    write_color_buffer_to_ppm(img_before->color_buffer, img_before->width, img_before->height, "color output1.ppm");
+    write_color_buffer_to_ppm(img_after->color_buffer, img_after->width, img_after->height, "color output2.ppm");
+
     intensity_normalize(img_before->intensity_buffer, img_before->height, img_before->width);
+    intensity_normalize(img_after->intensity_buffer, img_after->height, img_after->width);
 
-    write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "normalized color output1.ppm");
+    write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "normalized intensity output1.ppm");
+    write_intensity_buffer_to_ppm(img_after->intensity_buffer, img_after->width, img_after->height, "normalized intensity output2.ppm");
 
     /**
      * FREE MEMORY
