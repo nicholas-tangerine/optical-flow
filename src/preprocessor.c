@@ -5,7 +5,11 @@
 #include "tiff_helpers.h"
 #include "math_helper.h"
 
-void intensity_smooth(float **buffer, uint32_t width, uint32_t height, uint32_t radius, float sigma) {
+void intensity_smooth(image_t *image, uint32_t radius, float sigma) {
+    float **buffer = &(image->intensity_buffer);
+    uint32_t width = image->width;
+    uint32_t height = image->height;
+
     uint32_t side_len = 2 * radius + 1;
 
     float *gaussian_weights_2d = calloc(side_len * side_len, sizeof(float));
@@ -49,14 +53,10 @@ float weighted_avg(float *buffer, float *weights, uint32_t width, uint32_t heigh
     return intensity;
 }
 
-void apply_gaussian_blur(uint32_t *buffer, float sigma) {
-    (void) buffer;
-    (void) sigma;
-
-    return;
-}
-
-void intensity_normalize(float *buffer, uint32_t width, uint32_t height) {
+void intensity_normalize(image_t *image) {
+    float *buffer = image->intensity_buffer;
+    uint32_t width = image->width;
+    uint32_t height = image->height;
     float max = 0.0f;
 
     for (uint32_t y = 0; y < height; y++) {

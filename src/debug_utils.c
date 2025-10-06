@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "tiff_helpers.h"
+#include "debug_utils.h"
 
 void write_color_buffer_to_ppm(uint32_t *buffer, uint32_t width, uint32_t height, char *output_file) {
     if (strcmp(output_file, "") == 0) output_file = "output.ppm";
@@ -43,8 +44,12 @@ void write_color_buffer_to_ppm(uint32_t *buffer, uint32_t width, uint32_t height
     return;
 }
 
-void write_intensity_buffer_to_ppm(float *buffer, uint32_t width, uint32_t height, char *output_file) {
+void write_intensity_buffer_to_ppm(image_t *image, char *output_file) {
     if (strcmp(output_file, "") == 0) output_file = "output.ppm";
+
+    float *buffer = image->intensity_buffer;
+    uint32_t width = image->width;
+    uint32_t height = image->height;
 
     FILE *fp = fopen(output_file, "wb");
     if (fp == NULL) {

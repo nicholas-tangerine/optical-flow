@@ -6,7 +6,7 @@
 
 #include "debug_utils.h"
 
-#define GAUSSIAN_SMOOTH_SIGMA 5
+#define GAUSSIAN_SMOOTH_SIGMA 2
 #define GAUSSIAN_SMOOTH_RADIUS 3*GAUSSIAN_SMOOTH_SIGMA
 
 int main(int argc, char **argv) {
@@ -22,10 +22,20 @@ int main(int argc, char **argv) {
         fprintf(stderr, "DEBUG: before and after images do not have the same dimensions\n");
         return 1;
     }
-    
-    intensity_smooth(&(img_before->intensity_buffer), img_before->width, img_before->height, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
 
-    write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "output.ppm");
+    intensity_normalize(img_before);
+    intensity_normalize(img_after);
+    
+    intensity_smooth(img_before, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
+    intensity_smooth(img_after, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
+
+    intensity_normalize(img_before);
+    intensity_normalize(img_after);
+
+    //write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "output.ppm");
+    //write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "output.ppm");
+    write_intensity_buffer_to_ppm(img_before, "output1.ppm");
+    write_intensity_buffer_to_ppm(img_after, "output2.ppm");
 
 
     /**

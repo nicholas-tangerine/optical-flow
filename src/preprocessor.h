@@ -1,6 +1,7 @@
 #ifndef PREPROCESSOR_H
 #define PREPROCESSOR_H
 
+#include "image.h"
 #include "tiffio.h"
 
 /**
@@ -12,7 +13,7 @@
  * @param radius            radius for the weighted averaging
  * @param sigma             standard deviation of the gauss distribution
  */
-void intensity_smooth(float **buffer, uint32_t width, uint32_t height, uint32_t radius, float sigma);
+void intensity_smooth(image_t *image, uint32_t radius, float sigma);
 
 /**
  * Weighted average of matrix `weights` applied to buffer
@@ -43,6 +44,6 @@ void apply_gaussian_blur(uint32_t *buffer, float sigma);
  * @param height            img height
  * @param width             img width
  */
-void intensity_normalize(float *buffer, uint32_t width, uint32_t height);
+void intensity_normalize(image_t *image);
 
 #endif

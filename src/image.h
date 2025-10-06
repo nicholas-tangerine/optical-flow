@@ -1,3 +1,6 @@
+#ifndef IMAGE_H
+#define IMAGE_H
+
 #include <stdbool.h>
 
 #include "tiffio.h"
@@ -38,3 +41,5 @@ void image_free(image_t **img);
  * @return true if dimensions are equal
  */
 bool image_same_dimensions(image_t *img1, image_t *img2);
+
+#endif
