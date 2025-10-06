@@ -40,8 +40,7 @@ float weighted_avg(float *buffer, float *weights, uint32_t width, uint32_t heigh
 
             uint32_t buffer_index_x = x - radius + j;
             uint32_t buffer_index_y = y - radius + i;
-            /* row-major order: index = y * width + x */
-            uint32_t buffer_index = buffer_index_y * (int)width + buffer_index_x;
+            uint32_t buffer_index = buffer_index_y * width + buffer_index_x;
 
             intensity += weights[weights_index] * buffer[buffer_index];
         }
