@@ -6,6 +6,9 @@
 
 #include "debug_utils.h"
 
+#define GAUSSIAN_SMOOTH_SIGMA 3
+#define GAUSSIAN_SMOOTH_RADIUS 3*GAUSSIAN_SMOOTH_SIGMA
+
 int main(int argc, char **argv) {
     if (argc < 4) {
         fprintf(stderr, "DEBUG: not enough params\n");
@@ -19,18 +22,9 @@ int main(int argc, char **argv) {
         fprintf(stderr, "DEBUG: before and after images do not have the same dimensions\n");
         return 1;
     }
+    
+    intensity_smooth(&(img_before->intensity_buffer), img_before->width, img_before->height, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
 
-    write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "intensity output1.ppm");
-    write_intensity_buffer_to_ppm(img_after->intensity_buffer, img_after->width, img_after->height, "intensity output2.ppm");
-
-    write_color_buffer_to_ppm(img_before->color_buffer, img_before->width, img_before->height, "color output1.ppm");
-    write_color_buffer_to_ppm(img_after->color_buffer, img_after->width, img_after->height, "color output2.ppm");
-
-    intensity_normalize(img_before->intensity_buffer, img_before->height, img_before->width);
-    intensity_normalize(img_after->intensity_buffer, img_after->height, img_after->width);
-
-    write_intensity_buffer_to_ppm(img_before->intensity_buffer, img_before->width, img_before->height, "normalized intensity output1.ppm");
-    write_intensity_buffer_to_ppm(img_after->intensity_buffer, img_after->width, img_after->height, "normalized intensity output2.ppm");
 
     /**
      * FREE MEMORY

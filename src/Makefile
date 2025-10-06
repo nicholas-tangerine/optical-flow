@@ -1,8 +1,8 @@
 CC      := gcc
 CFLAGS  := -Wpedantic -Wall -Wextra -ggdb3 -O2
-LDFLAGS := -ltiff
+LDFLAGS := -ltiff -lm
 
-SRC     := main.c preprocessor.c tiff_helpers.c filename_utils.c debug_utils.c image.c
+SRC     := main.c preprocessor.c tiff_helpers.c filename_utils.c debug_utils.c image.c math_helper.c
 OBJ     := $(SRC:.c=.o)
 TARGET  := main
 
