@@ -34,25 +34,6 @@ void intensity_smooth(image_t *image, uint32_t radius, float sigma) {
     return;
 }
 
-float weighted_avg(float *buffer, float *weights, uint32_t width, uint32_t height, uint32_t side_len, uint32_t radius, uint32_t x, uint32_t y) {
-    (void) height;
-    float intensity = 0.0f;
-
-    for (uint32_t i = 0; i < side_len; i++) {
-        for (uint32_t j = 0; j < side_len; j++) {
-            uint32_t weights_index = i * side_len + j;
-
-            uint32_t buffer_index_x = x - radius + j;
-            uint32_t buffer_index_y = y - radius + i;
-            uint32_t buffer_index = buffer_index_y * width + buffer_index_x;
-
-            intensity += weights[weights_index] * buffer[buffer_index];
-        }
-    }
-
-    return intensity;
-}
-
 void intensity_normalize(image_t *image) {
     float *buffer = image->intensity_buffer;
     uint32_t width = image->width;

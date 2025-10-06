@@ -33,6 +33,15 @@ image_t *image_init(char *file_name, char *mode);
 void image_free(image_t **img);
 
 /**
+ * Allocates and copies existing image_t to new image_t
+ *
+ * @param img                   preexisting image
+ *
+ * @return new                  copy of image
+ */
+image_t *image_copy(image_t *img);
+
+/**
  * Checks whether two image_t structs have the same dimensions
  * 
  * @param img1
