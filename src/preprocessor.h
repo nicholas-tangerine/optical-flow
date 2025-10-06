@@ -18,6 +18,6 @@ void apply_gaussian_blur(uint32_t *buffer, double sigma);
  * @param height            img height
  * @param width             img width
  */
-void intensity_normalize(float *buffer, uint32_t height, uint32_t width);
+void intensity_normalize(float *buffer, uint32_t width, uint32_t height);
 
 #endif

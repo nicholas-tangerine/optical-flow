@@ -9,7 +9,7 @@ void apply_gaussian_blur(uint32_t *tif, double sigma) {
     return;
 }
 
-void intensity_normalize(float *buffer, uint32_t height, uint32_t width) {
+void intensity_normalize(float *buffer, uint32_t width, uint32_t height ) {
     float max = 0.0f;
 
     for (uint32_t y = 0; y < height; y++) {
