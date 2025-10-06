@@ -8,8 +8,6 @@
  *
  * @param tif               pointer to TIFF struct
  * @param buffer            
- * 
- * @return 2d int array
  */
 void tiff_read_to_color_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width);
 
@@ -18,8 +16,6 @@ void tiff_read_to_color_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uin
  *
  * @param tif               pointer to TIFF struct
  * @param buffer            
- * 
- * @return 2d int array
  */
 void tiff_read_to_intensity_buffer(TIFF *tif, float *buffer, uint32_t height, uint32_t width);
 

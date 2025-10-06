@@ -17,8 +17,8 @@ void write_color_buffer_to_ppm(uint32_t *buffer, uint32_t width, uint32_t height
 
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width ; x++) {
-            int index = y * width + x;
-            int buffer_val = buffer[index];
+            uint32_t index = y * width + x;
+            uint32_t buffer_val = buffer[index];
 
             unsigned int r = TIFFGetR(buffer_val);
             unsigned int g = TIFFGetG(buffer_val);
@@ -56,7 +56,7 @@ void write_intensity_buffer_to_ppm(float *buffer, uint32_t width, uint32_t heigh
     
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width ; x++) {
-            int index = y * width + x;
+            uint32_t index = y * width + x;
             float buffer_val = buffer[index];
 
             unsigned char intensity = (unsigned char) (buffer_val * 255.0f);
