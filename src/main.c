@@ -23,6 +23,8 @@ int main(int argc, char **argv) {
         return 1;
     }
 
+    intensity_downscale(img_before, 4);
+
     intensity_match(img_before, img_after);
     
     intensity_smooth(img_before, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);

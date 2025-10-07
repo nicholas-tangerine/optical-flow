@@ -34,6 +34,19 @@ void intensity_smooth(image_t *image, uint32_t radius, float sigma) {
     return;
 }
 
+void intensity_downscale(image_t *image, uint32_t scale_factor) {
+    uint32_t width = image->width;
+    uint32_t height = image->height;
+
+    uint32_t box_width = width / scale_factor;
+    uint32_t box_height = height / scale_factor
+
+    for (uint32_t y = 0; y < height; y += box_height) {
+        for (uint32_t x = 0; x < width; x += box_width) {
+        }
+    }
+}
+
 void intensity_normalize(image_t *image) {
     float *buffer = image->intensity_buffer;
     uint32_t width = image->width;
