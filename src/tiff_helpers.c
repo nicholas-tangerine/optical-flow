@@ -27,7 +27,7 @@ void tiff_read_to_intensity_buffer(TIFF *tif, float *buffer, uint32_t height, ui
 
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width; x++) {
-            int index = y * width + x;
+            int index = (int)y * (int)width + (int)x;
             uint32_t temp_buffer_val = temp_buffer[index];
 
             unsigned int r = TIFFGetR(temp_buffer_val);
@@ -35,8 +35,8 @@ void tiff_read_to_intensity_buffer(TIFF *tif, float *buffer, uint32_t height, ui
             unsigned int b = TIFFGetB(temp_buffer_val);
             unsigned int a = TIFFGetA(temp_buffer_val);
 
-            float avg_color = (r + g + b) / 3.0f;
-            float alpha_frac = a / 255.0f;
+            float avg_color = (float) (r + g + b) / 3.0f;
+            float alpha_frac = (float) a / 255.0f;
             float intensity = (avg_color * alpha_frac) / 255.0f;
 
             if (intensity < 0.0f) intensity = 0.0f;

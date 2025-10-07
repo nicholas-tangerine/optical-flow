@@ -18,8 +18,8 @@ void intensity_smooth(image_t *image, uint32_t radius, float sigma) {
     float *temp_buffer = calloc(width * height, sizeof(float));
     memcpy(temp_buffer, *buffer, width * height * sizeof(float));
 
-    for (uint32_t i = radius; i < height - radius; i++) {
-        for (uint32_t j = radius; j < width - radius; j++) {
+    for (uint32_t i = 0; i < height; i++) {
+        for (uint32_t j = 0; j < width; j++) {
             uint32_t buffer_index = i * width + j;
             float intensity = weighted_avg(*buffer, gaussian_weights_2d, width, height, side_len, radius, j, i);
             temp_buffer[buffer_index] = intensity;
@@ -55,3 +55,20 @@ void intensity_normalize(image_t *image) {
         }
     }
 }
+
+void intensity_match(image_t *img1, image_t *img2) {
+    uint32_t buffer_len = img1->width * img1->height;
+    uint32_t temp = img2->width * img2->height;
+
+    if (buffer_len != temp) fprintf(stderr, "DEBUG: intensity_match: img1 and \
+            img2 are different sizes");
+
+    float avg1 = average_val(img1->intensity_buffer, buffer_len);
+    float avg2 = average_val(img2->intensity_buffer, buffer_len);
+
+    if (avg1 < avg2) 
+        increment_buffer(img1->intensity_buffer, buffer_len, avg2 - avg1);
+    else 
+        increment_buffer(img2->intensity_buffer, buffer_len, avg2 - avg1);
+}
+

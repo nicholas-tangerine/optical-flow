@@ -1,5 +1,5 @@
 CC      := gcc
-CFLAGS  := -Wpedantic -Wall -Wextra -g -O2
+CFLAGS  := -Wconversion -Wpedantic -Wall -Wextra -g -O2
 #-ggdb3 
 LDFLAGS := -ltiff -lm
 

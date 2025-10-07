@@ -49,14 +49,14 @@ image_t *image_copy(image_t *img) {
     new->width = img->width;
     new->read = img->read;
 
-    int color_size = new->height * new->width * sizeof(uint32_t);
-    int intensity_size = new->height * new->width * sizeof(float);
+    int color_size = (int) new->height * (int) new->width * (int) sizeof(uint32_t);
+    int intensity_size = (int) new->height * (int) new->width * (int) sizeof(float);
 
     new->color_buffer = (uint32_t *) calloc(new->height * new->width, sizeof(uint32_t));
     new->intensity_buffer = (float *) calloc(new->height * new->width, sizeof(float));
 
-    memcpy(new->color_buffer, img->color_buffer, color_size);
-    memcpy(new->intensity_buffer, img->intensity_buffer, intensity_size);
+    memcpy(new->color_buffer, img->color_buffer, (size_t) color_size);
+    memcpy(new->intensity_buffer, img->intensity_buffer, (size_t) intensity_size);
 
     return new;
 }

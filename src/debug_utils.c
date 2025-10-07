@@ -26,15 +26,15 @@ void write_color_buffer_to_ppm(uint32_t *buffer, uint32_t width, uint32_t height
             unsigned int b = TIFFGetB(buffer_val);
             unsigned int a = TIFFGetA(buffer_val);
 
-            float alpha = a / 255.0;        //  scaled between 0 and 1
+            float alpha = (float) a / 255.0f;        //  scaled between 0 and 1
 
-            r = (unsigned int) (r * alpha);
-            g = (unsigned int) (g * alpha);
-            b = (unsigned int) (b * alpha);
+            r = (unsigned int) ((float) r * alpha);
+            g = (unsigned int) ((float) g * alpha);
+            b = (unsigned int) ((float) b * alpha);
 
-            fputc(r, fp);
-            fputc(g, fp);
-            fputc(b, fp);
+            fputc((int) r, fp);
+            fputc((int) g, fp);
+            fputc((int) b, fp);
         }
     }
 

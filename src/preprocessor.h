@@ -16,14 +16,6 @@
 void intensity_smooth(image_t *image, uint32_t radius, float sigma);
 
 /**
- * Applies Gaussian blur to image buffer
- *
- * @param buffer            RGBA image data in uint32_t buffer
- * @param sigma             standard deviation
- */
-void apply_gaussian_blur(uint32_t *buffer, float sigma);
-
-/**
  * Normalizes image intensity, pixels range from 0 to 1
  *
  * @param buffer            intensity map
@@ -31,5 +23,14 @@ void apply_gaussian_blur(uint32_t *buffer, float sigma);
  * @param width             img width
  */
 void intensity_normalize(image_t *image);
+
+/**
+ * Takes two images and brightens the dimmer one such taht their average
+ * intensities are equal
+ *
+ * @param img1
+ * @param img2
+ */
+void intensity_match(image_t *img1, image_t *img2);
 
 #endif

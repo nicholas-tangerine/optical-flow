@@ -22,6 +22,8 @@ int main(int argc, char **argv) {
         fprintf(stderr, "DEBUG: before and after images do not have the same dimensions\n");
         return 1;
     }
+
+    intensity_match(img_before, img_after);
     
     intensity_smooth(img_before, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
     intensity_smooth(img_after, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
@@ -31,7 +33,6 @@ int main(int argc, char **argv) {
 
     write_intensity_buffer_to_ppm(img_before, "output1.ppm");
     write_intensity_buffer_to_ppm(img_after, "output2.ppm");
-
 
     /**
      * FREE MEMORY
