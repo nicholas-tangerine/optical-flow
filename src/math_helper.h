@@ -36,10 +36,29 @@ float average_val(float *buffer, uint32_t buffer_len);
  */
 void increment_buffer(float *buffer, uint32_t buffer_len, float val);
 
+/**
+ * Creates a 1d array with terms adding to 1.000
+ * Highest point at index `radius`, with sigma being standard deviation
+ *
+ * @param weights           pointer to array in which gaussian distribution will be stored
+ * @param radius            distance from center of array
+ * @param sigma             standard deviation
+ */
 void gaussian_dist_1d(float *weights, uint32_t radius, float sigma);
 
+/**
+ * Creates a 2d array with terms adding to 1.000
+ * Highest point is at the center of the 2d array, and decays outward according
+ * to sigma (standard deviation)
+ *
+ * @param weights           pointer to array in which gaussian distribution will be stored
+ * @param radius            determines the size of the 2d array (N by N matrix with N=2*radius+1
+ * @param sigma             standard deviation
+ */
 void gaussian_dist_2d(float *weights, uint32_t radius, float sigma);
 
+/**
+ * TODO: implement
+ */
 float *difference_of_gaussians_2d(float *buffer1, float *buffer2, uint32_t width, uint32_t height, uint32_t radius, float sigma);
-
-#endif
+#endif 
