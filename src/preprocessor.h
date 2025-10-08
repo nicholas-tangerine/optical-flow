@@ -16,6 +16,17 @@
 void intensity_smooth(image_t *image, uint32_t radius, float sigma);
 
 /**
+ * Scales the provided image down by the specified factor.
+ *
+ * The image will be scaled in-place. The intensity buffer structure of the provided image will
+ * not be realloc'ed, but the width and height will be set to the scaled versions.
+ *
+ * @param image         The image to scale down.
+ * @param scale_factor  The factor by which to scale the image.
+ */
+void intensity_downscale(image_t *image, uint32_t scale_factor);
+
+/**
  * Normalizes image intensity, pixels range from 0 to 1
  *
  * @param buffer            intensity map

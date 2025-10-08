@@ -4,16 +4,15 @@
 
 #include "math_helper.h"
 
-float weighted_avg(float *buffer, float *weights, uint32_t width, uint32_t height, uint32_t side_len, uint32_t radius, uint32_t x, uint32_t y) {
-    (void) height;
+float weighted_avg(float *buffer, float *weights, uint32_t width, uint32_t height, uint32_t kernel_width, uint32_t kernel_height, uint32_t x, uint32_t y) {
     float intensity = 0.0f;
 
-    for (uint32_t i = 0; i < side_len; i++) {
-        for (uint32_t j = 0; j < side_len; j++) {
-            uint32_t weights_index = i * side_len + j;
+    for (uint32_t i = 0; i < kernel_height; i++) {
+        for (uint32_t j = 0; j < kernel_width; j++) {
+            uint32_t weights_index = i * kernel_width + j;
 
-            int buffer_index_x = (int) x - (int) radius + (int) j;
-            int buffer_index_y = (int) y - (int) radius + (int) i;
+            int buffer_index_x = (int) x - (int) (kernel_width / 2) + (int) j;
+            int buffer_index_y = (int) y - (int) (kernel_height / 2) + (int) i;
 
             //  if out of bounds, mirror
             buffer_index_x = buffer_index_x < 0 ? -buffer_index_x : buffer_index_x;
@@ -80,8 +79,6 @@ void gaussian_dist_2d(float *weights, uint32_t radius, float sigma) {
 
     return;
 }
-
-void 
 
 //  TODO: actually implement
 float *difference_of_gaussians_2d(float *buffer1, float *buffer2, uint32_t width, uint32_t height, uint32_t radius, float sigma) {

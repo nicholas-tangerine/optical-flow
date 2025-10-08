@@ -10,12 +10,12 @@
  * @param weights
  * @param width             width of buffer 
  * @param height            height of buffer
- * @param side_len
- * @param radius
+ * @param kernel_width      the width of the weights matrix
+ * @param kernel_height     the height of the weights matrix
  * @param x                 x coordinate of where weights is centered
  * @param y                 y coordinate of where weights is centered
  */
-float weighted_avg(float *buffer, float *weights, uint32_t width, uint32_t height, uint32_t side_len, uint32_t radius, uint32_t x, uint32_t y);
+float weighted_avg(float *buffer, float *weights, uint32_t width, uint32_t height, uint32_t kernel_width, uint32_t kernel_height, uint32_t x, uint32_t y);
 
 /**
  * Finds the average value in an array
