@@ -81,8 +81,6 @@ void gaussian_dist_2d(float *weights, uint32_t radius, float sigma) {
     return;
 }
 
-void 
-
 //  TODO: actually implement
 float *difference_of_gaussians_2d(float *buffer1, float *buffer2, uint32_t width, uint32_t height, uint32_t radius, float sigma) {
     uint32_t side_len = 2 * radius + 1;
