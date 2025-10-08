@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -21,7 +22,7 @@ void intensity_smooth(image_t *image, uint32_t radius, float sigma) {
     for (uint32_t i = 0; i < height; i++) {
         for (uint32_t j = 0; j < width; j++) {
             uint32_t buffer_index = i * width + j;
-            float intensity = weighted_avg(*buffer, gaussian_weights_2d, width, height, side_len, radius, j, i);
+            float intensity = weighted_avg(*buffer, gaussian_weights_2d, width, height, side_len, side_len, j, i);
             temp_buffer[buffer_index] = intensity;
         }
     }
@@ -38,13 +39,34 @@ void intensity_downscale(image_t *image, uint32_t scale_factor) {
     uint32_t width = image->width;
     uint32_t height = image->height;
 
-    uint32_t box_width = width / scale_factor;
-    uint32_t box_height = height / scale_factor;
+    uint32_t new_width = (uint32_t) ceilf((float) width / (float) scale_factor);
+    uint32_t new_height = (uint32_t) ceilf((float) height / (float) scale_factor);
+
+    uint32_t box_width = (uint32_t) ceilf((float) width / (float) new_width);
+    uint32_t box_height = (uint32_t) ceilf((float) height / (float) new_height);
+
+    float *weights = malloc(box_width * box_height * sizeof(float));
+    for (size_t i = 0; i < box_width * box_height; i++) {
+        weights[i] = 1.0f;
+    }
 
     for (uint32_t y = 0; y < height; y += box_height) {
         for (uint32_t x = 0; x < width; x += box_width) {
+            uint32_t new_y = y / box_height;
+            uint32_t new_x = x / box_width;
+            float box_sum_intensity = weighted_avg(image->intensity_buffer, weights,
+                                                   width, height,
+                                                   box_width, box_height,
+                                                   x, y);
+            float box_avg_intensity = box_sum_intensity / (float) (box_width * box_height);
+            image->intensity_buffer[new_y * new_width + new_x] = box_avg_intensity;
         }
     }
+
+    image->width = new_width;
+    image->height = new_height;
+
+    free(weights);
 }
 
 void intensity_normalize(image_t *image) {
@@ -73,8 +95,8 @@ void intensity_match(image_t *img1, image_t *img2) {
     uint32_t buffer_len = img1->width * img1->height;
     uint32_t temp = img2->width * img2->height;
 
-    if (buffer_len != temp) fprintf(stderr, "DEBUG: intensity_match: img1 and \
-            img2 are different sizes");
+    if (buffer_len != temp) fprintf(stderr, "DEBUG: intensity_match: img1 and "
+                                    "img2 are different sizes\n");
 
     float avg1 = average_val(img1->intensity_buffer, buffer_len);
     float avg2 = average_val(img2->intensity_buffer, buffer_len);
