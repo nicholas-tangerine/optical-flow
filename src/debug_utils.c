@@ -5,7 +5,11 @@
 #include "tiff_helpers.h"
 #include "debug_utils.h"
 
-void write_color_buffer_to_ppm(uint32_t *buffer, uint32_t width, uint32_t height, char *output_file) {
+void write_color_buffer_to_ppm(image_t *image, char *output_file) {
+    uint32_t width = image->width;
+    uint32_t height = image->height;
+    uint32_t *color_buffer = image->color_buffer;
+
     if (strcmp(output_file, "") == 0) output_file = "output.ppm";
 
     FILE *fp = fopen(output_file, "wb");
@@ -19,7 +23,7 @@ void write_color_buffer_to_ppm(uint32_t *buffer, uint32_t width, uint32_t height
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width ; x++) {
             uint32_t index = y * width + x;
-            uint32_t buffer_val = buffer[index];
+            uint32_t buffer_val = color_buffer[index];
 
             unsigned int r = TIFFGetR(buffer_val);
             unsigned int g = TIFFGetG(buffer_val);

@@ -4,24 +4,17 @@
 
 #include "math_helper.h"
 
-float weighted_avg(float *buffer, float *weights, uint32_t width, uint32_t height, uint32_t kernel_width, uint32_t kernel_height, uint32_t x, uint32_t y) {
+float weighted_avg(float *buffer, float *weights, uint32_t image_width, uint32_t image_height, uint32_t kernel_width, uint32_t kernel_height, uint32_t x, uint32_t y) {
     float intensity = 0.0f;
 
     for (uint32_t i = 0; i < kernel_height; i++) {
         for (uint32_t j = 0; j < kernel_width; j++) {
             uint32_t weights_index = i * kernel_width + j;
 
-            int buffer_index_x = (int) x - (int) (kernel_width / 2) + (int) j;
-            int buffer_index_y = (int) y - (int) (kernel_height / 2) + (int) i;
+            int buffer_index_x = (int) x + (int) j;
+            int buffer_index_y = (int) y + (int) i;
 
-            //  if out of bounds, mirror
-            buffer_index_x = buffer_index_x < 0 ? -buffer_index_x : buffer_index_x;
-            buffer_index_x = buffer_index_x >= (int) width ? (int) width - (buffer_index_x - (int) width + 1) : buffer_index_x;
-
-            buffer_index_y = buffer_index_y < 0 ? -buffer_index_y : buffer_index_y;
-            buffer_index_y = buffer_index_y >= (int) height ? (int) height - (buffer_index_y - (int) height + 1) : buffer_index_y;
-
-            int buffer_index = buffer_index_y * (int) width + buffer_index_x;
+            int buffer_index = get_index(image_width, image_height, buffer_index_x, buffer_index_y);
 
             intensity += weights[weights_index] * buffer[buffer_index];
         }
@@ -78,6 +71,16 @@ void gaussian_dist_2d(float *weights, uint32_t radius, float sigma) {
     free(gaussian_weights_1d);
 
     return;
+}
+
+int get_index(uint32_t width, uint32_t height, int x, int y) {
+    x = x < 0 ? -x : x;
+    x = x >= (int) width ? (int) width - (x - (int) width + 1) : x;
+
+    y = y < 0 ? -y : y;
+    y = y >= (int) height ? (int) height - (y - (int) height + 1) : y;
+
+    return y * (int) width + x;
 }
 
 //  TODO: actually implement

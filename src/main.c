@@ -23,7 +23,8 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    intensity_downscale(img_before, 4);
+    intensity_downscale(img_before, 6);
+    intensity_downscale(img_after, 6);
 
     intensity_match(img_before, img_after);
     
@@ -36,11 +37,23 @@ int main(int argc, char **argv) {
     write_intensity_buffer_to_ppm(img_before, "output1.ppm");
     write_intensity_buffer_to_ppm(img_after, "output2.ppm");
 
+    float *di_dt = intensity_partial_derivative_field(img_before, img_after, 'x', 20.0f);
+
+    for (uint32_t i = 0; i < img_before->height; i++) {
+        for (uint32_t j = 0; j < img_before->width; j++) {
+            int index = get_index(img_before->width, img_before->height, j, i);
+            //printf("%.2f ", di_dt[index]);
+        }
+        printf("\n");
+    }
+
     /**
      * FREE MEMORY
      */
     image_free(&img_before);
     image_free(&img_after);
+
+    //free(di_dt);
 
     return 0;
 }
