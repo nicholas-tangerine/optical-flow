@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "ofm.h"
+#include "ofm_helper.h"
 #include "math_helper.h"
 
 ofm_t *ofm_init(image_t *img1, image_t *img2, uint32_t width, uint32_t height) {
@@ -76,6 +77,6 @@ void iterate(ofm_t *ofm) {
     uint32_t area = ofm->field_width * ofm->field_height;
 
     for (uint32_t i = 0; i < area; i++) {
-        ofm->u_field[i] = 
+        ofm->u_field[i] = 0.0f;
     }
 }

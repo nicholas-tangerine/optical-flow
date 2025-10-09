@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#include "image.h"
+
 typedef struct {
     float *u_field;       //  x component velocity
     float *v_field;       //  y component velocity
@@ -29,7 +31,7 @@ typedef struct {
  *
  * @return ofm          pointer to initialized ofm struct
  */
-ofm_t *ofm_init(uint32_t width, uint32_t height);
+ofm_t *ofm_init(image_t *img1, image_t *img2, uint32_t width, uint32_t height);
 
 /**
  * Returns the local average x component velocity at a point (x,y)
