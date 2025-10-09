@@ -4,17 +4,17 @@
 
 #include "math_helper.h"
 
-float weighted_avg(float *buffer, float *weights, uint32_t image_width, uint32_t image_height, uint32_t kernel_width, uint32_t kernel_height, uint32_t x, uint32_t y) {
+float weighted_avg(float *buffer, float *weights, uint32_t buffer_width, uint32_t buffer_height, uint32_t kernel_width, uint32_t kernel_height, int x, int y) {
     float intensity = 0.0f;
 
     for (uint32_t i = 0; i < kernel_height; i++) {
         for (uint32_t j = 0; j < kernel_width; j++) {
             uint32_t weights_index = i * kernel_width + j;
 
-            int buffer_index_x = (int) x + (int) j;
-            int buffer_index_y = (int) y + (int) i;
+            int buffer_index_x = x + (int) j;
+            int buffer_index_y = y + (int) i;
 
-            int buffer_index = get_index(image_width, image_height, buffer_index_x, buffer_index_y);
+            int buffer_index = get_index(buffer_width, buffer_height, buffer_index_x, buffer_index_y);
 
             intensity += weights[weights_index] * buffer[buffer_index];
         }

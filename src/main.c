@@ -1,13 +1,17 @@
 #include <stdlib.h>
 
 #include "tiff_helpers.h"
+#include "math_helper.h"
+#include "ofm_helper.h"
+
 #include "preprocessor.h"
 #include "image.h"
+#include "ofm.h"
 
 #include "debug_utils.h"
 
 #define GAUSSIAN_SMOOTH_SIGMA 2
-#define GAUSSIAN_SMOOTH_RADIUS 3*GAUSSIAN_SMOOTH_SIGMA
+#define GAUSSIAN_SMOOTH_RADIUS 3 * GAUSSIAN_SMOOTH_SIGMA
 
 int main(int argc, char **argv) {
     if (argc < 4) {
@@ -15,45 +19,44 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    image_t *img_before = image_init(argv[1], "r");
-    image_t *img_after = image_init(argv[2], "r");
+    image_t *img1 = image_init(argv[1], "r");
+    image_t *img2 = image_init(argv[2], "r");
 
-    if (!image_same_dimensions(img_before, img_after)) {
+    if (!image_same_dimensions(img1 , img2)) {
         fprintf(stderr, "DEBUG: before and after images do not have the same dimensions\n");
         return 1;
     }
 
-    intensity_downscale(img_before, 6);
-    intensity_downscale(img_after, 6);
+    intensity_downscale(img1, 9);
+    intensity_downscale(img2, 9);
 
-    intensity_match(img_before, img_after);
+    intensity_match(img1, img2);
     
-    intensity_smooth(img_before, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
-    intensity_smooth(img_after, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
+    intensity_smooth(img1, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
+    intensity_smooth(img2, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
 
-    intensity_normalize(img_before);
-    intensity_normalize(img_after);
+    intensity_normalize(img1);
+    intensity_normalize(img2);
 
-    write_intensity_buffer_to_ppm(img_before, "output1.ppm");
-    write_intensity_buffer_to_ppm(img_after, "output2.ppm");
+    write_intensity_buffer_to_ppm(img1, "output1.ppm");
+    write_intensity_buffer_to_ppm(img2, "output2.ppm");
 
-    float *di_dt = intensity_partial_derivative_field(img_before, img_after, 'x', 20.0f);
+    float *di_dx = intensity_partial_derivative_field(img1, img2, 'x', 20.0f);
+    float *di_dy = intensity_partial_derivative_field(img1, img2, 'y', 20.0f);
+    float *di_dt = intensity_partial_derivative_field(img1, img2, 't', 20.0f);
 
-    for (uint32_t i = 0; i < img_before->height; i++) {
-        for (uint32_t j = 0; j < img_before->width; j++) {
-            int index = get_index(img_before->width, img_before->height, j, i);
-            //printf("%.2f ", di_dt[index]);
-        }
-        printf("\n");
-    }
+    ofm_t *ofm = ofm_init(img1, img2, img1->width, img1->height);
+    ofm_free(&ofm);
 
     /**
      * FREE MEMORY
      */
-    image_free(&img_before);
-    image_free(&img_after);
+    image_free(&img1);
+    image_free(&img2);
 
-    //free(di_dt);
+    free(di_dx);
+    free(di_dy);
+    free(di_dt);
 
     return 0;
 }

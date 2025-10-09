@@ -15,7 +15,7 @@
  * @param x                 x coordinate of top left corner of kernel
  * @param y                 y coordinate of top left corner of kernel
  */
-float weighted_avg(float *buffer, float *weights, uint32_t image_width, uint32_t image_height, uint32_t kernel_width, uint32_t kernel_height, uint32_t x, uint32_t y);
+float weighted_avg(float *buffer, float *weights, uint32_t buffer_width, uint32_t buffer_height, uint32_t kernel_width, uint32_t kernel_height, int x, int y);
 
 /**
  * Finds the average value in an array

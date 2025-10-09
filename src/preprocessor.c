@@ -22,7 +22,7 @@ void intensity_smooth(image_t *image, uint32_t radius, float sigma) {
     for (uint32_t i = 0; i < height; i++) {
         for (uint32_t j = 0; j < width; j++) {
             uint32_t buffer_index = i * width + j;
-            float intensity = weighted_avg(*buffer, gaussian_weights_2d, width, height, side_len, side_len, j, i);
+            float intensity = weighted_avg(*buffer, gaussian_weights_2d, width, height, side_len, side_len, (int) j, (int) i);
             temp_buffer[buffer_index] = intensity;
         }
     }
@@ -57,7 +57,7 @@ void intensity_downscale(image_t *image, uint32_t scale_factor) {
             float box_sum_intensity = weighted_avg(image->intensity_buffer, weights,
                                                    width, height,
                                                    box_width, box_height,
-                                                   x, y);
+                                                   (int) x, (int) y);
             float box_avg_intensity = box_sum_intensity / (float) (box_width * box_height);
             image->intensity_buffer[new_y * new_width + new_x] = box_avg_intensity;
         }
