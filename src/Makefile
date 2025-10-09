@@ -6,7 +6,7 @@ SRC     := main.c preprocessor.c tiff_helpers.c filename_utils.c debug_utils.c i
 OBJ     := $(SRC:.c=.o)
 TARGET  := main
 
-MISC	:= *.ppm
+MISC	:= *.ppm *.txt
 
 .PHONY: all clean
 

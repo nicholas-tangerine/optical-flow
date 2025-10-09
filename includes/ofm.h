@@ -63,6 +63,13 @@ float local_u(ofm_t *ofm, int x, int y);
 float local_v(ofm_t *ofm, int x, int y);
 
 /**
+ * Normalizes a velocity field to range from 0-1
+ *
+ * @param ofm           ofm struct containing u_field and v_field
+ */
+void velocity_field_normalize(ofm_t *ofm);
+
+/**
  * Updates ofm struct with new velocity estimates
  *
  * @param ofm           ofm struct

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "ofm.h"
 #include "ofm_helper.h"
@@ -72,6 +73,28 @@ float local_v(ofm_t *ofm, int x, int y) {
     float out = weighted_avg(ofm->v_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x, y);
 
     return out;
+}
+
+void velocity_field_normalize(ofm_t *ofm) {
+    uint32_t area = ofm->field_area;
+
+    float max_velo = 0.0f;
+    float curr_velo = 0.0f;
+
+    float *u_field = ofm->u_field;
+    float *v_field = ofm->v_field;
+
+    for (uint32_t i = 0; i < area; i ++) {
+        curr_velo = u_field[i]*u_field[i] + v_field[i]*v_field[i];
+        max_velo = curr_velo > max_velo ? curr_velo : max_velo;
+    }
+
+    max_velo = sqrtf(max_velo);
+
+    for (uint32_t i = 0; i < area; i ++) {
+        u_field[i] /= max_velo;
+        v_field[i] /= max_velo;
+    }
 }
 
 void iterate(ofm_t *ofm, float alpha) {

@@ -3,7 +3,10 @@
 #include <stdio.h>
 
 #include "tiff_helpers.h"
+#include "math_helper.h"
 #include "debug_utils.h"
+
+#include "ofm.h"
 
 void write_color_buffer_to_ppm(image_t *image, char *output_file) {
     uint32_t width = image->width;
@@ -78,4 +81,31 @@ void write_intensity_buffer_to_ppm(image_t *image, char *output_file) {
     fp = NULL;
 
     return;
+}
+
+void write_velocity_field_to_file(ofm_t *ofm, char *output_file) {
+    if (strcmp(output_file, "") == 0) output_file = "velo_field.txt";
+    uint32_t width = ofm->field_width;
+    uint32_t height = ofm->field_height;
+
+    float *u_field = ofm->u_field;
+    float *v_field = ofm->v_field;
+
+    FILE *fptr = fopen(output_file, "w");
+    if (fptr == NULL) {
+        fprintf(stderr, "DEBUG: couldn't open velo_field.txt\n");
+        height = 0;
+        width = 0;
+    }
+
+    fprintf(fptr, "%u %u\n", width, height);
+
+    for (uint32_t y = 0; y < height; y++) {
+        for (uint32_t x = 0; x < width; x++) {
+            int i = get_index(width, height, (int) x, (int) y);
+            fprintf(fptr, "%.8f %.8f\n", u_field[i], v_field[i]);
+        }
+    }
+
+    fclose(fptr);
 }
