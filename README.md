@@ -8,7 +8,8 @@ Purely algorithmic, no AI/ML.
 # Run Instructions
  - Download ![libTIFF](https://libtiff.gitlab.io/libtiff/) for parsing .tif images
  - `cd` in to `src` directory
- - `sh run.sh <img_before.tif> <img_after.tif> dt`
+ - run `make clean` and `make`
+ - `./main <img_before.tif> <img_after.tif> dt`
 
 # Acknowledgements
 This work used data acquired from the NASA/ESA HST Space Telescope, associated
