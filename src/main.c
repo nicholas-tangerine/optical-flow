@@ -12,6 +12,8 @@
 
 #define GAUSSIAN_SMOOTH_SIGMA 2
 #define GAUSSIAN_SMOOTH_RADIUS 3 * GAUSSIAN_SMOOTH_SIGMA
+#define ITERATIONS 3
+#define ALPHA 20.0f
 
 int main(int argc, char **argv) {
     if (argc < 4) {
@@ -46,6 +48,9 @@ int main(int argc, char **argv) {
     float *di_dt = intensity_partial_derivative_field(img1, img2, 't', 20.0f);
 
     ofm_t *ofm = ofm_init(img1, img2, img1->width, img1->height);
+
+    iterate(ofm, ALPHA);
+
     ofm_free(&ofm);
 
     /**

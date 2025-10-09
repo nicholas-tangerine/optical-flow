@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
 #include "ofm.h"
@@ -73,10 +74,36 @@ float local_v(ofm_t *ofm, int x, int y) {
     return out;
 }
 
-void iterate(ofm_t *ofm) {
-    uint32_t area = ofm->field_width * ofm->field_height;
+void iterate(ofm_t *ofm, float alpha) {
+    float *E_x = ofm->E_x;
+    float *E_y = ofm->E_y;
+    float *E_t = ofm->E_t;
 
-    for (uint32_t i = 0; i < area; i++) {
-        ofm->u_field[i] = 0.0f;
+    float *u_field = ofm->u_field;
+    float *v_field = ofm->v_field;
+
+    float *u_field_new = calloc(ofm->field_area, sizeof(float));
+    memcpy(u_field_new, ofm->u_field, ofm->field_area);
+
+    float *v_field_new = calloc(ofm->field_area, sizeof(float));
+    memcpy(v_field_new, ofm->v_field, ofm->field_area);
+
+    float bracketed_term;
+    for (int y = 0; y < (int) ofm->field_height; y++) {
+        for (int x = 0; x < (int) ofm->field_width; x++) {
+            int i = get_index(ofm->field_width, ofm->field_height, x, y);
+            float u_avg = local_u(ofm, x, y);
+            float v_avg = local_v(ofm, x, y);
+
+            bracketed_term = (E_x[i] * u_avg + E_y[i] * v_avg + E_t[i]) / (alpha*alpha + E_x[i]*E_x[i] + E_y[i]*E_y[i]);
+            u_field_new[i] = u_field[i] - E_x[i] * bracketed_term;
+            v_field_new[i] = v_field[i] - E_y[i] * bracketed_term;
+        }
     }
+
+    free(ofm->u_field);
+    free(ofm->v_field);
+
+    ofm->u_field = u_field_new;
+    ofm->v_field = v_field_new;
 }

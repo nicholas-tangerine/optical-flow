@@ -34,6 +34,13 @@ typedef struct {
 ofm_t *ofm_init(image_t *img1, image_t *img2, uint32_t width, uint32_t height);
 
 /**
+ * Frees all memory relating to ofm struct, including the struct itself
+ *
+ * @param ofm           pointer to addr of ofm struct
+ */
+void ofm_free(ofm_t **ofm);
+
+/**
  * Returns the local average x component velocity at a point (x,y)
  *
  * @param ofm           ofm struct
@@ -60,5 +67,5 @@ float local_v(ofm_t *ofm, int x, int y);
  *
  * @param ofm           ofm struct
  */
-void iterate(ofm_t *ofm);
+void iterate(ofm_t *ofm, float alpha);
 #endif
