@@ -10,9 +10,6 @@ Purely algorithmic, no AI/ML.
  - `cd` in to `src` directory
  - `sh run.sh <img_before.tif> <img_after.tif> dt`
 
-[//]: # # Implementation Details
-[//]: # ![code flowchart](/docs/images/flowchart.png)
-
 # Acknowledgements
 This work used data acquired from the NASA/ESA HST Space Telescope, associated
 with OPAL program (PI: Simon, GO13937), and archived by the Space Telescope
