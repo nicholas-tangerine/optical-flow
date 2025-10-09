@@ -5,8 +5,13 @@ Optical flow for planetary cloud tracking
 Use two images taken $\Delta t$ apart and track the wind velocity patterns.
 Purely algorithmic, no AI/ML.
 
-# Implementation Details
-![code flowchart](/docs/images/flowchart.png)
+# Run Instructions
+ - Download ![libTIFF](https://libtiff.gitlab.io/libtiff/) for parsing .tif images
+ - `cd` in to `src` directory
+ - `sh run.sh <img_before.tif> <img_after.tif> dt`
+
+[//]: # # Implementation Details
+[//]: # ![code flowchart](/docs/images/flowchart.png)
 
 # Acknowledgements
 This work used data acquired from the NASA/ESA HST Space Telescope, associated
