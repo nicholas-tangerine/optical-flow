@@ -2,7 +2,7 @@ CC      := gcc
 CFLAGS  := -Wconversion -Wpedantic -Wall -Wextra -g -O2 -I "../includes/"
 LDFLAGS := -ltiff -lm
 
-SRC     := main.c preprocessor.c tiff_helpers.c filename_utils.c debug_utils.c image.c math_helper.c ofm_helper.c ofm.c
+SRC     := main.c preprocessor.c tiff_helpers.c filename_utils.c debug_utils.c image.c math_helper.c ofm_helper.c ofm.c particle.c
 OBJ     := $(SRC:.c=.o)
 TARGET  := main
 

@@ -50,28 +50,21 @@ double intensity_d_dx_point(image_t *img1, image_t *img2, int x, int y) {
     uint32_t width = img1->width;
     uint32_t height = img1->height;
 
-    int ij1k = get_index(width, height, x, y+1);
-    int ijk = get_index(width, height, x, y);
+    int idx_xy    = get_index(width, height, x,     y);
+    int idx_x1y   = get_index(width, height, x + 1, y);
+    int idx_xy1   = get_index(width, height, x,     y + 1);
+    int idx_x1y1  = get_index(width, height, x + 1, y + 1);
 
-    int i1j1k = get_index(width, height, x+1, y+1);
-    int i1jk = get_index(width, height, x, y+1);
+    double d_intensity = 0.0;
 
-    int ij1k1 = ij1k;
-    int ijk1 = ijk;
+    d_intensity += buffer1[idx_x1y]  - buffer1[idx_xy];
+    d_intensity += buffer1[idx_x1y1] - buffer1[idx_xy1];
+    d_intensity += buffer2[idx_x1y]  - buffer2[idx_xy];
+    d_intensity += buffer2[idx_x1y1] - buffer2[idx_xy1];
 
-    int i1j1k1 = i1j1k;
-    int i1jk1 = i1jk;
+    d_intensity /= 4.0;
 
-    double d_intensity = 0.0f;
-
-    d_intensity += buffer1[ij1k] - buffer1[ijk];
-    d_intensity += buffer1[i1j1k] - buffer1[i1jk];
-    d_intensity += buffer2[ij1k1] - buffer2[ijk1];
-    d_intensity += buffer2[i1j1k1] - buffer2[i1jk1];
-
-    d_intensity /= 4.0f;
-
-    return d_intensity ;
+    return d_intensity;
 }
 
 double intensity_d_dy_point(image_t *img1, image_t *img2, int x, int y) {
@@ -81,28 +74,21 @@ double intensity_d_dy_point(image_t *img1, image_t *img2, int x, int y) {
     uint32_t width = img1->width;
     uint32_t height = img1->height;
 
-    int i1jk = get_index(width, height, x, y+1);
-    int ijk = get_index(width, height, x, y);
+    int idx_xy    = get_index(width, height, x,     y);
+    int idx_x1y   = get_index(width, height, x + 1, y);
+    int idx_xy1   = get_index(width, height, x,     y + 1);
+    int idx_x1y1  = get_index(width, height, x + 1, y + 1);
 
-    int i1j1k = get_index(width, height, x+1, y+1);
-    int ij1k = get_index(width, height, x+1, y);
+    double d_intensity = 0.0;
 
-    int i1jk1 = i1jk;
-    int ijk1 = ijk;
+    d_intensity += buffer1[idx_xy1]  - buffer1[idx_xy];
+    d_intensity += buffer1[idx_x1y1] - buffer1[idx_x1y];
+    d_intensity += buffer2[idx_xy1]  - buffer2[idx_xy];
+    d_intensity += buffer2[idx_x1y1] - buffer2[idx_x1y];
 
-    int i1j1k1 = i1j1k;
-    int ij1k1 = ij1k;
+    d_intensity /= 4.0;
 
-    double d_intensity = 0.0f;
-
-    d_intensity += buffer1[i1jk] - buffer1[ijk];
-    d_intensity += buffer1[i1j1k] - buffer1[ij1k];
-    d_intensity += buffer2[i1jk1] - buffer2[ijk1];
-    d_intensity += buffer2[i1j1k1] - buffer2[ij1k1];
-
-    d_intensity /= 4.0f;
-
-    return d_intensity ;
+    return d_intensity;
 }
 
 double intensity_d_dt_point(image_t *img1, image_t *img2, int x, int y, double dt) {
@@ -112,28 +98,20 @@ double intensity_d_dt_point(image_t *img1, image_t *img2, int x, int y, double d
     uint32_t width = img1->width;
     uint32_t height = img1->height;
 
-    int ijk1 = get_index(width, height, x, y);
-    int ijk = ijk1;
+    int idx_xy    = get_index(width, height, x,     y);
+    int idx_x1y   = get_index(width, height, x + 1, y);
+    int idx_xy1   = get_index(width, height, x,     y + 1);
+    int idx_x1y1  = get_index(width, height, x + 1, y + 1);
 
-    int i1jk1 = get_index(width, height, x, y+1);
-    int i1jk = i1jk1;
+    double d_intensity = 0.0;
 
-    int ij1k1 = get_index(width, height, x+1, y);
-    int ij1k = ij1k1;
+    d_intensity += buffer2[idx_xy]  - buffer1[idx_xy];
+    d_intensity += buffer2[idx_x1y] - buffer1[idx_x1y];
+    d_intensity += buffer2[idx_xy1] - buffer1[idx_xy1];
+    d_intensity += buffer2[idx_x1y1] - buffer1[idx_x1y1];
 
-    int i1j1k1 = get_index(width, height, x+1, y+1);
-    int i1j1k = i1j1k1;
-
-    double d_intensity = 0.0f;
-
-    d_intensity += buffer2[ijk1] - buffer1[ijk];
-    d_intensity += buffer2[i1jk1] - buffer1[i1jk];
-    d_intensity += buffer2[ij1k1] - buffer1[ij1k];
-    d_intensity += buffer2[i1j1k1] - buffer1[i1j1k];
-
-    d_intensity /= 4.0f;
-
+    d_intensity /= 4.0;
     d_intensity /= dt;
 
-    return d_intensity ;
+    return d_intensity;
 }

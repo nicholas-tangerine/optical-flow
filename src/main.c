@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 
 #include "tiff_helpers.h"
 #include "math_helper.h"
@@ -11,10 +12,11 @@
 #include "debug_utils.h"
 
 #define DOWNSCALE_FACTOR 2
-#define GAUSSIAN_SMOOTH_SIGMA 2
-#define GAUSSIAN_SMOOTH_RADIUS 3 * GAUSSIAN_SMOOTH_SIGMA
-#define ITERATIONS 128
-#define H_S_ALPHA 20.0f
+#define GAUSSIAN_SMOOTH_SIGMA 1
+#define GAUSSIAN_SMOOTH_RADIUS 1 * GAUSSIAN_SMOOTH_SIGMA
+#define ITERATIONS 32
+#define H_S_ALPHA 1.0f
+
 
 int main(int argc, char **argv) {
     if (argc < 4) {
@@ -33,7 +35,7 @@ int main(int argc, char **argv) {
     intensity_downscale(img1, DOWNSCALE_FACTOR);
     intensity_downscale(img2, DOWNSCALE_FACTOR);
 
-    intensity_match(img1, img2);
+    //intensity_match(img1, img2);
 
     intensity_smooth(img1, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
     intensity_smooth(img2, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
@@ -54,9 +56,14 @@ int main(int argc, char **argv) {
         iterate(ofm, H_S_ALPHA);
     }
 
+
     velocity_field_normalize(ofm);
 
     write_velocity_field_to_file(ofm, "velo field downscaled.txt");
+
+    int *streamlines = draw_streamlines_to_buffer(ofm, 200, 100, 8000, 50.0);
+    write_streamlines_to_ppm(ofm, streamlines, "streamlines.ppm");
+
 
     /**
      * FREE MEMORY

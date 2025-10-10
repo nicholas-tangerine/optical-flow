@@ -27,6 +27,8 @@ ofm_t *ofm_init(image_t *img1, image_t *img2, uint32_t width, uint32_t height) {
     weights[4] = 0.0f;
 
     ofm->local_velocity_weights = weights;
+    ofm->weight_width = 3;
+    ofm->weight_height = 3;
 
     ofm->field_width = width;
     ofm->field_height = height;
@@ -53,25 +55,20 @@ void ofm_free(ofm_t **ofm) {
 
 double local_u(ofm_t *ofm, int x, int y) {
     if (x < 0 || y < 0 || x >= (int) ofm->field_width - (int) ofm->weight_width || y >= (int) ofm->field_height - (int) ofm->weight_height) {
-        fprintf(stderr, "DEBUG: calculating local u requires indexing out of \
-                bounds");
         return 0.0f;
     }
 
-    double out = weighted_avg(ofm->u_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x, y);
+    double out = weighted_avg(ofm->u_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x - (int) ofm->weight_width / 2, y - (int) ofm->weight_height / 2);
 
     return out;
 }
 
 double local_v(ofm_t *ofm, int x, int y) {
     if (x < 0 || y < 0 || x >= (int) ofm->field_width - (int) ofm->weight_width || y >= (int) ofm->field_height - (int) ofm->weight_height) {
-        fprintf(stderr, "DEBUG: calculating local u requires indexing out of \
-                bounds");
         return 0.0f;
     }
 
-    int index = get_index(ofm->field_width, ofm->field_height, x, y);
-    double out = weighted_avg(ofm->v_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x, y);
+    double out = weighted_avg(ofm->v_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x - (int) ofm->weight_width / 2, y - (int) ofm->weight_height / 2);
 
     return out;
 }
@@ -107,10 +104,10 @@ void iterate(ofm_t *ofm, double alpha) {
     double *v_field = ofm->v_field;
 
     double *u_field_new = calloc(ofm->field_area, sizeof(double));
-    memcpy(u_field_new, ofm->u_field, ofm->field_area);
+    memcpy(u_field_new, u_field, ofm->field_area * sizeof(double));
 
     double *v_field_new = calloc(ofm->field_area, sizeof(double));
-    memcpy(v_field_new, ofm->v_field, ofm->field_area);
+    memcpy(v_field_new, v_field, ofm->field_area * sizeof(double));
 
     double frac_numerator;
     double frac_denominator;

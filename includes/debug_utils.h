@@ -38,4 +38,8 @@ void write_intensity_buffer_to_ppm(image_t *image, char *output_file);
  * @param output_file       defaults to velo_field.txt when output_file == ""
  */
 void write_velocity_field_to_file(ofm_t *ofm, char *output_file);
+
+int *draw_streamlines_to_buffer(ofm_t *ofm, uint32_t particle_per_row, uint32_t particle_per_col, uint32_t steps, double dt);
+
+void write_streamlines_to_ppm(ofm_t *ofm, int *streamlines, char *output_file);
 #endif
