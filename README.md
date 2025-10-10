@@ -8,6 +8,8 @@ Purely algorithmic, no AI/ML.
 # Run Instructions
  - Download ![libTIFF](https://libtiff.gitlab.io/libtiff/) for parsing .tif images
  - `cd` in to `src` directory
+ - Adjust Makefile as necessary
+    - If you ran `make install` for LibTIFF should work out of the box
  - run `make clean` and `make`
  - `./main <img_before.tif> <img_after.tif> dt`
 
