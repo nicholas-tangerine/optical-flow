@@ -13,7 +13,7 @@
  * @param radius            radius for the weighted averaging
  * @param sigma             standard deviation of the gauss distribution
  */
-void intensity_smooth(image_t *image, uint32_t radius, float sigma);
+void intensity_smooth(image_t *image, uint32_t radius, double sigma);
 
 /**
  * Scales the provided image down by the specified factor.

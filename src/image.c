@@ -15,7 +15,7 @@ image_t *image_init(char *file_name, char *mode) {
     img->read = strcmp(mode, "r") == 0 ? true : false;
 
     img->color_buffer = (uint32_t *) calloc(img->height * img->width, sizeof(uint32_t));
-    img->intensity_buffer = (float *) calloc(img->height * img->width, sizeof(float));
+    img->intensity_buffer = (double *) calloc(img->height * img->width, sizeof(double));
 
     tiff_read_to_color_buffer(img->tif, img->color_buffer, img->height, img->width);
     tiff_read_to_intensity_buffer(img->tif, img->intensity_buffer, img->height, img->width);
@@ -50,10 +50,10 @@ image_t *image_copy(image_t *img) {
     new->read = img->read;
 
     int color_size = (int) new->height * (int) new->width * (int) sizeof(uint32_t);
-    int intensity_size = (int) new->height * (int) new->width * (int) sizeof(float);
+    int intensity_size = (int) new->height * (int) new->width * (int) sizeof(double);
 
     new->color_buffer = (uint32_t *) calloc(new->height * new->width, sizeof(uint32_t));
-    new->intensity_buffer = (float *) calloc(new->height * new->width, sizeof(float));
+    new->intensity_buffer = (double *) calloc(new->height * new->width, sizeof(double));
 
     memcpy(new->color_buffer, img->color_buffer, (size_t) color_size);
     memcpy(new->intensity_buffer, img->intensity_buffer, (size_t) intensity_size);

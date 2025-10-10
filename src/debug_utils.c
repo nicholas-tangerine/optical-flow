@@ -33,11 +33,11 @@ void write_color_buffer_to_ppm(image_t *image, char *output_file) {
             unsigned int b = TIFFGetB(buffer_val);
             unsigned int a = TIFFGetA(buffer_val);
 
-            float alpha = (float) a / 255.0f;        //  scaled between 0 and 1
+            double alpha = (double) a / 255.0f;        //  scaled between 0 and 1
 
-            r = (unsigned int) ((float) r * alpha);
-            g = (unsigned int) ((float) g * alpha);
-            b = (unsigned int) ((float) b * alpha);
+            r = (unsigned int) ((double) r * alpha);
+            g = (unsigned int) ((double) g * alpha);
+            b = (unsigned int) ((double) b * alpha);
 
             fputc((int) r, fp);
             fputc((int) g, fp);
@@ -54,7 +54,7 @@ void write_color_buffer_to_ppm(image_t *image, char *output_file) {
 void write_intensity_buffer_to_ppm(image_t *image, char *output_file) {
     if (strcmp(output_file, "") == 0) output_file = "output.ppm";
 
-    float *buffer = image->intensity_buffer;
+    double *buffer = image->intensity_buffer;
     uint32_t width = image->width;
     uint32_t height = image->height;
 
@@ -69,7 +69,7 @@ void write_intensity_buffer_to_ppm(image_t *image, char *output_file) {
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width ; x++) {
             uint32_t index = y * width + x;
-            float buffer_val = buffer[index];
+            double buffer_val = buffer[index];
 
             unsigned char intensity = (unsigned char) (buffer_val * 255.0f);
 
@@ -88,8 +88,8 @@ void write_velocity_field_to_file(ofm_t *ofm, char *output_file) {
     uint32_t width = ofm->field_width;
     uint32_t height = ofm->field_height;
 
-    float *u_field = ofm->u_field;
-    float *v_field = ofm->v_field;
+    double *u_field = ofm->u_field;
+    double *v_field = ofm->v_field;
 
     FILE *fptr = fopen(output_file, "w");
     if (fptr == NULL) {

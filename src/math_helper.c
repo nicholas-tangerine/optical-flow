@@ -4,8 +4,8 @@
 
 #include "math_helper.h"
 
-float weighted_avg(float *buffer, float *weights, uint32_t buffer_width, uint32_t buffer_height, uint32_t kernel_width, uint32_t kernel_height, int x, int y) {
-    float intensity = 0.0f;
+double weighted_avg(double *buffer, double *weights, uint32_t buffer_width, uint32_t buffer_height, uint32_t kernel_width, uint32_t kernel_height, int x, int y) {
+    double intensity = 0.0f;
 
     for (uint32_t i = 0; i < kernel_height; i++) {
         for (uint32_t j = 0; j < kernel_width; j++) {
@@ -23,42 +23,42 @@ float weighted_avg(float *buffer, float *weights, uint32_t buffer_width, uint32_
     return intensity;
 }
 
-float average_val(float *buffer, uint32_t buffer_len) {
-    float total = 0.0f;
+double average_val(double *buffer, uint32_t buffer_len) {
+    double total = 0.0f;
     for (uint32_t i = 0; i < buffer_len; i++) {
         total += buffer[i];
     }
 
-    return (float) total / (float) buffer_len;
+    return (double) total / (double) buffer_len;
 }
 
-void increment_buffer(float *buffer, uint32_t buffer_len, float val) {
+void increment_buffer(double *buffer, uint32_t buffer_len, double val) {
     for (uint32_t i = 0; i < buffer_len; i++) { buffer[i] += val; }
 }
 
-void gaussian_dist_1d(float *weights, uint32_t radius, float sigma) {
+void gaussian_dist_1d(double *weights, uint32_t radius, double sigma) {
     uint32_t side_len = 2 * radius + 1;
-    float fraction = 1.0f / (sigma * sqrtf(2.0f * (float) M_PI));
-    float exponent;
+    double fraction = 1.0f / (sigma * sqrt(2.0f * (double) M_PI));
+    double exponent;
 
     for (uint32_t i = 0; i < side_len; i++) {
-        exponent = expf(-0.5f * powf((((float) i - (float) radius) / (float) sigma), 2.0f));
+        exponent = exp(-0.5f * pow((((double) i - (double) radius) / (double) sigma), 2.0f));
 
         weights[i] = fraction * exponent;
     }
 
     //  SCALE TO SUM TO 1.0
-    float total = 0.0f;
+    double total = 0.0f;
     for (uint32_t i = 0; i < side_len; i++) total += weights[i];
     for (uint32_t i = 0; i < side_len; i++) weights[i] /= total;
 
     return;
 }
 
-void gaussian_dist_2d(float *weights, uint32_t radius, float sigma) {
+void gaussian_dist_2d(double *weights, uint32_t radius, double sigma) {
     uint32_t side_len = 2 * radius + 1;
 
-    float *gaussian_weights_1d = calloc(side_len, sizeof(float));
+    double *gaussian_weights_1d = calloc(side_len, sizeof(double));
     gaussian_dist_1d(gaussian_weights_1d, radius, sigma);
 
     for (uint32_t i = 0; i < side_len; i++) {
@@ -84,11 +84,11 @@ int get_index(uint32_t width, uint32_t height, int x, int y) {
 }
 
 //  TODO: actually implement
-float *difference_of_gaussians_2d(float *buffer1, float *buffer2, uint32_t width, uint32_t height, uint32_t radius, float sigma) {
+double *difference_of_gaussians_2d(double *buffer1, double *buffer2, uint32_t width, uint32_t height, uint32_t radius, double sigma) {
     uint32_t side_len = 2 * radius + 1;
 
-    float *out = calloc(width * height, sizeof(float));
-    float *weights = calloc(side_len * side_len, sizeof(float));
+    double *out = calloc(width * height, sizeof(double));
+    double *weights = calloc(side_len * side_len, sizeof(double));
     gaussian_dist_2d(weights, side_len, sigma);
 
     return out;

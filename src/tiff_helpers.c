@@ -15,7 +15,7 @@ void tiff_read_to_color_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uin
     }
 }
 
-void tiff_read_to_intensity_buffer(TIFF *tif, float *buffer, uint32_t height, uint32_t width) {
+void tiff_read_to_intensity_buffer(TIFF *tif, double *buffer, uint32_t height, uint32_t width) {
     uint32_t *temp_buffer = calloc(height * width, sizeof(uint32_t));
     int res = TIFFReadRGBAImageOriented(tif, width, height, temp_buffer,
             ORIENTATION_TOPLEFT, 0);
@@ -35,9 +35,9 @@ void tiff_read_to_intensity_buffer(TIFF *tif, float *buffer, uint32_t height, ui
             unsigned int b = TIFFGetB(temp_buffer_val);
             unsigned int a = TIFFGetA(temp_buffer_val);
 
-            float avg_color = (float) (r + g + b) / 3.0f;
-            float alpha_frac = (float) a / 255.0f;
-            float intensity = (avg_color * alpha_frac) / 255.0f;
+            double avg_color = (double) (r + g + b) / 3.0f;
+            double alpha_frac = (double) a / 255.0f;
+            double intensity = (avg_color * alpha_frac) / 255.0f;
 
             if (intensity < 0.0f) intensity = 0.0f;
             if (intensity > 1.0f) intensity = 1.0f;

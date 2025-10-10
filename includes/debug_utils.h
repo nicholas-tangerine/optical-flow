@@ -15,7 +15,7 @@
 void write_color_buffer_to_ppm(image_t *image, char *output_file);
 
 /**
- * Writes intensity buffer to output_file (default: output.ppm); assumes buffer is floats
+ * Writes intensity buffer to output_file (default: output.ppm); assumes buffer is doubles
  *
  * @param image             pointer to image containing intensity buffer
  * @param output_file       name of output file (.ppm)

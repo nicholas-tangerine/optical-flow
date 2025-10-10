@@ -15,7 +15,7 @@
  * @param x                 x coordinate of top left corner of kernel
  * @param y                 y coordinate of top left corner of kernel
  */
-float weighted_avg(float *buffer, float *weights, uint32_t buffer_width, uint32_t buffer_height, uint32_t kernel_width, uint32_t kernel_height, int x, int y);
+double weighted_avg(double *buffer, double *weights, uint32_t buffer_width, uint32_t buffer_height, uint32_t kernel_width, uint32_t kernel_height, int x, int y);
 
 /**
  * Finds the average value in an array
@@ -25,7 +25,7 @@ float weighted_avg(float *buffer, float *weights, uint32_t buffer_width, uint32_
  *
  * @return avg
  */
-float average_val(float *buffer, uint32_t buffer_len);
+double average_val(double *buffer, uint32_t buffer_len);
 
 /**
  * Adds a value `val` to each element in the array
@@ -34,7 +34,7 @@ float average_val(float *buffer, uint32_t buffer_len);
  * @param buffer_len
  * @param val
  */
-void increment_buffer(float *buffer, uint32_t buffer_len, float val);
+void increment_buffer(double *buffer, uint32_t buffer_len, double val);
 
 /**
  * Creates a 1d array with terms adding to 1.000
@@ -44,7 +44,7 @@ void increment_buffer(float *buffer, uint32_t buffer_len, float val);
  * @param radius            distance from center of array
  * @param sigma             standard deviation
  */
-void gaussian_dist_1d(float *weights, uint32_t radius, float sigma);
+void gaussian_dist_1d(double *weights, uint32_t radius, double sigma);
 
 /**
  * Creates a 2d array with terms adding to 1.000
@@ -55,7 +55,7 @@ void gaussian_dist_1d(float *weights, uint32_t radius, float sigma);
  * @param radius            determines the size of the 2d array (N by N matrix with N=2*radius+1
  * @param sigma             standard deviation
  */
-void gaussian_dist_2d(float *weights, uint32_t radius, float sigma);
+void gaussian_dist_2d(double *weights, uint32_t radius, double sigma);
 
 /**
  * Gets the index of a 2d array stored in contiguous memory. Mirrors into the 2d array if out of bounds
@@ -72,5 +72,5 @@ int get_index(uint32_t width, uint32_t height, int x, int y);
 /**
  * TODO: implement
  */
-float *difference_of_gaussians_2d(float *buffer1, float *buffer2, uint32_t width, uint32_t height, uint32_t radius, float sigma);
+double *difference_of_gaussians_2d(double *buffer1, double *buffer2, uint32_t width, uint32_t height, uint32_t radius, double sigma);
 #endif 

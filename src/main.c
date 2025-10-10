@@ -10,10 +10,10 @@
 
 #include "debug_utils.h"
 
-#define DOWNSCALE_FACTOR 9
+#define DOWNSCALE_FACTOR 2
 #define GAUSSIAN_SMOOTH_SIGMA 2
 #define GAUSSIAN_SMOOTH_RADIUS 3 * GAUSSIAN_SMOOTH_SIGMA
-#define ITERATIONS 3
+#define ITERATIONS 128
 #define H_S_ALPHA 20.0f
 
 int main(int argc, char **argv) {
@@ -44,9 +44,9 @@ int main(int argc, char **argv) {
     write_intensity_buffer_to_ppm(img1, "output1.ppm");
     write_intensity_buffer_to_ppm(img2, "output2.ppm");
 
-    //float *di_dx = intensity_partial_derivative_field(img1, img2, 'x', 20.0f);
-    //float *di_dy = intensity_partial_derivative_field(img1, img2, 'y', 20.0f);
-    //float *di_dt = intensity_partial_derivative_field(img1, img2, 't', 20.0f);
+    //double *di_dx = intensity_partial_derivative_field(img1, img2, 'x', 20.0f);
+    //double *di_dy = intensity_partial_derivative_field(img1, img2, 'y', 20.0f);
+    //double *di_dt = intensity_partial_derivative_field(img1, img2, 't', 20.0f);
 
     ofm_t *ofm = ofm_init(img1, img2, img1->width, img1->height);
 

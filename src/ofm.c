@@ -9,15 +9,15 @@
 
 ofm_t *ofm_init(image_t *img1, image_t *img2, uint32_t width, uint32_t height) {
     ofm_t *ofm = calloc(1, sizeof(ofm_t));
-    ofm->u_field = calloc(width * height, sizeof(float));
-    ofm->v_field = calloc(width * height, sizeof(float));
+    ofm->u_field = calloc(width * height, sizeof(double));
+    ofm->v_field = calloc(width * height, sizeof(double));
 
     ofm->E_x = intensity_partial_derivative_field(img1, img2, 'x', 20.0f);
     ofm->E_y = intensity_partial_derivative_field(img1, img2, 'y', 20.0f);
     ofm->E_t = intensity_partial_derivative_field(img1, img2, 't', 20.0f);
 
-    float temp = 1.0f / 12.0f;
-    float *weights = calloc(9, sizeof(float));
+    double temp = 1.0f / 12.0f;
+    double *weights = calloc(9, sizeof(double));
 
     for (int i = 0; i < 9; i++) {
         weights[i] = temp;
@@ -51,26 +51,27 @@ void ofm_free(ofm_t **ofm) {
     *ofm = NULL;
 }
 
-float local_u(ofm_t *ofm, int x, int y) {
+double local_u(ofm_t *ofm, int x, int y) {
     if (x < 0 || y < 0 || x >= (int) ofm->field_width - (int) ofm->weight_width || y >= (int) ofm->field_height - (int) ofm->weight_height) {
         fprintf(stderr, "DEBUG: calculating local u requires indexing out of \
                 bounds");
         return 0.0f;
     }
 
-    float out = weighted_avg(ofm->u_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x, y);
+    double out = weighted_avg(ofm->u_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x, y);
 
     return out;
 }
 
-float local_v(ofm_t *ofm, int x, int y) {
+double local_v(ofm_t *ofm, int x, int y) {
     if (x < 0 || y < 0 || x >= (int) ofm->field_width - (int) ofm->weight_width || y >= (int) ofm->field_height - (int) ofm->weight_height) {
         fprintf(stderr, "DEBUG: calculating local u requires indexing out of \
                 bounds");
         return 0.0f;
     }
 
-    float out = weighted_avg(ofm->v_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x, y);
+    int index = get_index(ofm->field_width, ofm->field_height, x, y);
+    double out = weighted_avg(ofm->v_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x, y);
 
     return out;
 }
@@ -78,18 +79,18 @@ float local_v(ofm_t *ofm, int x, int y) {
 void velocity_field_normalize(ofm_t *ofm) {
     uint32_t area = ofm->field_area;
 
-    float max_velo = 0.0f;
-    float curr_velo = 0.0f;
+    double max_velo = 0.0f;
+    double curr_velo = 0.0f;
 
-    float *u_field = ofm->u_field;
-    float *v_field = ofm->v_field;
+    double *u_field = ofm->u_field;
+    double *v_field = ofm->v_field;
 
     for (uint32_t i = 0; i < area; i ++) {
         curr_velo = u_field[i]*u_field[i] + v_field[i]*v_field[i];
         max_velo = curr_velo > max_velo ? curr_velo : max_velo;
     }
 
-    max_velo = sqrtf(max_velo);
+    max_velo = sqrt(max_velo);
 
     for (uint32_t i = 0; i < area; i ++) {
         u_field[i] /= max_velo;
@@ -97,30 +98,36 @@ void velocity_field_normalize(ofm_t *ofm) {
     }
 }
 
-void iterate(ofm_t *ofm, float alpha) {
-    float *E_x = ofm->E_x;
-    float *E_y = ofm->E_y;
-    float *E_t = ofm->E_t;
+void iterate(ofm_t *ofm, double alpha) {
+    double *E_x = ofm->E_x;
+    double *E_y = ofm->E_y;
+    double *E_t = ofm->E_t;
 
-    float *u_field = ofm->u_field;
-    float *v_field = ofm->v_field;
+    double *u_field = ofm->u_field;
+    double *v_field = ofm->v_field;
 
-    float *u_field_new = calloc(ofm->field_area, sizeof(float));
+    double *u_field_new = calloc(ofm->field_area, sizeof(double));
     memcpy(u_field_new, ofm->u_field, ofm->field_area);
 
-    float *v_field_new = calloc(ofm->field_area, sizeof(float));
+    double *v_field_new = calloc(ofm->field_area, sizeof(double));
     memcpy(v_field_new, ofm->v_field, ofm->field_area);
 
-    float bracketed_term;
+    double frac_numerator;
+    double frac_denominator;
+    double frac_term;
     for (int y = 0; y < (int) ofm->field_height; y++) {
         for (int x = 0; x < (int) ofm->field_width; x++) {
             int i = get_index(ofm->field_width, ofm->field_height, x, y);
-            float u_avg = local_u(ofm, x, y);
-            float v_avg = local_v(ofm, x, y);
 
-            bracketed_term = (E_x[i] * u_avg + E_y[i] * v_avg + E_t[i]) / (alpha*alpha + E_x[i]*E_x[i] + E_y[i]*E_y[i]);
-            u_field_new[i] = u_field[i] - E_x[i] * bracketed_term;
-            v_field_new[i] = v_field[i] - E_y[i] * bracketed_term;
+            double u_avg = local_u(ofm, x, y);
+            double v_avg = local_v(ofm, x, y);
+
+            frac_numerator = E_x[i] * u_avg + E_y[i] * v_avg + E_t[i];
+            frac_denominator = alpha*alpha + E_x[i]*E_x[i] + E_y[i]*E_y[i];
+            frac_term = frac_numerator / frac_denominator;
+
+            u_field_new[i] = u_avg - E_x[i] * frac_term;
+            v_field_new[i] = v_avg - E_y[i] * frac_term;
         }
     }
 

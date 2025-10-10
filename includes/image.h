@@ -8,7 +8,7 @@
 typedef struct {
     TIFF *tif;
     uint32_t *color_buffer;
-    float *intensity_buffer;
+    double *intensity_buffer;
     uint32_t height;
     uint32_t width;
     bool read;

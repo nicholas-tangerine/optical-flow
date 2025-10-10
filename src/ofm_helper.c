@@ -4,7 +4,7 @@
 #include "ofm_helper.h"
 #include "math_helper.h"
 
-float *intensity_partial_derivative_field(image_t *img1, image_t *img2, char dir, float dt) {
+double *intensity_partial_derivative_field(image_t *img1, image_t *img2, char dir, double dt) {
     if (!image_same_dimensions(img1, img2)) {
         fprintf(stderr, "img1 and img2 do not have the same dimensions");
         exit(1);
@@ -13,27 +13,27 @@ float *intensity_partial_derivative_field(image_t *img1, image_t *img2, char dir
     uint32_t width = img1->width;
     uint32_t height = img1->height;
 
-    float *field = calloc(width * height, sizeof(float));
+    double *field = calloc(width * height, sizeof(double));
 
     if (dir == 'x')  {
-        for (uint32_t i = 0; i < height - 1; i++) {
-            for (uint32_t j = 0; j < width - 1; j++) {
+        for (uint32_t i = 1; i < height - 1; i++) {
+            for (uint32_t j = 1; j < width - 1; j++) {
                 int field_index = get_index(width, height, (int) j, (int) i);
                 field[field_index] = intensity_d_dx_point(img1, img2, (int) j, (int) i);
             }
         }
     }
     else if (dir == 'y')  {
-        for (uint32_t i = 0; i < height - 1; i++) {
-            for (uint32_t j = 0; j < width - 1; j++) {
+        for (uint32_t i = 1; i < height - 1; i++) {
+            for (uint32_t j = 1; j < width - 1; j++) {
                 int field_index = get_index(width, height, (int) j, (int) i);
                 field[field_index] = intensity_d_dy_point(img1, img2, (int) j, (int) i);
             }
         }
     }
     else if (dir == 't')  {
-        for (uint32_t i = 0; i < height - 1; i++) {
-            for (uint32_t j = 0; j < width - 1; j++) {
+        for (uint32_t i = 1; i < height - 1; i++) {
+            for (uint32_t j = 1; j < width - 1; j++) {
                 int field_index = get_index(width, height, (int) j, (int) i);
                 field[field_index] = intensity_d_dt_point(img1, img2, (int) j, (int) i, dt);
             }
@@ -43,9 +43,9 @@ float *intensity_partial_derivative_field(image_t *img1, image_t *img2, char dir
     return field;
 }
 
-float intensity_d_dx_point(image_t *img1, image_t *img2, int x, int y) {
-    float *buffer1 = img1->intensity_buffer;
-    float *buffer2 = img2->intensity_buffer;
+double intensity_d_dx_point(image_t *img1, image_t *img2, int x, int y) {
+    double *buffer1 = img1->intensity_buffer;
+    double *buffer2 = img2->intensity_buffer;
 
     uint32_t width = img1->width;
     uint32_t height = img1->height;
@@ -62,7 +62,7 @@ float intensity_d_dx_point(image_t *img1, image_t *img2, int x, int y) {
     int i1j1k1 = i1j1k;
     int i1jk1 = i1jk;
 
-    float d_intensity = 0.0f;
+    double d_intensity = 0.0f;
 
     d_intensity += buffer1[ij1k] - buffer1[ijk];
     d_intensity += buffer1[i1j1k] - buffer1[i1jk];
@@ -74,9 +74,9 @@ float intensity_d_dx_point(image_t *img1, image_t *img2, int x, int y) {
     return d_intensity ;
 }
 
-float intensity_d_dy_point(image_t *img1, image_t *img2, int x, int y) {
-    float *buffer1 = img1->intensity_buffer;
-    float *buffer2 = img2->intensity_buffer;
+double intensity_d_dy_point(image_t *img1, image_t *img2, int x, int y) {
+    double *buffer1 = img1->intensity_buffer;
+    double *buffer2 = img2->intensity_buffer;
 
     uint32_t width = img1->width;
     uint32_t height = img1->height;
@@ -93,7 +93,7 @@ float intensity_d_dy_point(image_t *img1, image_t *img2, int x, int y) {
     int i1j1k1 = i1j1k;
     int ij1k1 = ij1k;
 
-    float d_intensity = 0.0f;
+    double d_intensity = 0.0f;
 
     d_intensity += buffer1[i1jk] - buffer1[ijk];
     d_intensity += buffer1[i1j1k] - buffer1[ij1k];
@@ -105,9 +105,9 @@ float intensity_d_dy_point(image_t *img1, image_t *img2, int x, int y) {
     return d_intensity ;
 }
 
-float intensity_d_dt_point(image_t *img1, image_t *img2, int x, int y, float dt) {
-    float *buffer1 = img1->intensity_buffer;
-    float *buffer2 = img2->intensity_buffer;
+double intensity_d_dt_point(image_t *img1, image_t *img2, int x, int y, double dt) {
+    double *buffer1 = img1->intensity_buffer;
+    double *buffer2 = img2->intensity_buffer;
 
     uint32_t width = img1->width;
     uint32_t height = img1->height;
@@ -124,7 +124,7 @@ float intensity_d_dt_point(image_t *img1, image_t *img2, int x, int y, float dt)
     int i1j1k1 = get_index(width, height, x+1, y+1);
     int i1j1k = i1j1k1;
 
-    float d_intensity = 0.0f;
+    double d_intensity = 0.0f;
 
     d_intensity += buffer2[ijk1] - buffer1[ijk];
     d_intensity += buffer2[i1jk1] - buffer1[i1jk];

@@ -6,18 +6,18 @@
 #include "image.h"
 
 typedef struct {
-    float *u_field;       //  x component velocity
-    float *v_field;       //  y component velocity
+    double *u_field;       //  x component velocity
+    double *v_field;       //  y component velocity
 
-    float *E_x;
-    float *E_y;
-    float *E_t;
+    double *E_x;
+    double *E_y;
+    double *E_t;
 
     uint32_t field_width;
     uint32_t field_height;
     uint32_t field_area;
 
-    float *local_velocity_weights;
+    double *local_velocity_weights;
     uint32_t weight_width;
     uint32_t weight_height;
 
@@ -49,7 +49,7 @@ void ofm_free(ofm_t **ofm);
  *
  * @return local average velocity
  */
-float local_u(ofm_t *ofm, int x, int y);
+double local_u(ofm_t *ofm, int x, int y);
 
 /**
  * Returns the local average y component velocity at a point (x,y)
@@ -60,7 +60,7 @@ float local_u(ofm_t *ofm, int x, int y);
  *
  * @return local average velocity
  */
-float local_v(ofm_t *ofm, int x, int y);
+double local_v(ofm_t *ofm, int x, int y);
 
 /**
  * Normalizes a velocity field to range from 0-1
@@ -74,5 +74,5 @@ void velocity_field_normalize(ofm_t *ofm);
  *
  * @param ofm           ofm struct
  */
-void iterate(ofm_t *ofm, float alpha);
+void iterate(ofm_t *ofm, double alpha);
 #endif
