@@ -73,20 +73,26 @@ void intensity_normalize(image_t *image) {
     double *buffer = image->intensity_buffer;
     uint32_t width = image->width;
     uint32_t height = image->height;
+
+    double min = 1e10f;
     double max = 0.0f;
+    double diff = 0.0f;
 
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width; x++) {
             uint32_t index = y * width + x;
             double buffer_val = buffer[index];
             max = buffer_val > max ? buffer_val : max;
+            min = buffer_val < min ? buffer_val : min;
         }
     }
 
+    diff = max - min;
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width; x++) {
             uint32_t index = y * width + x;
-            buffer[index] /= max;
+            buffer[index] += min;
+            buffer[index] /= diff;
         }
     }
 }
