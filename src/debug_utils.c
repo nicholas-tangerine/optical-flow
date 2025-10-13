@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "tiff_helpers.h"
 #include "math_helper.h"
@@ -142,16 +143,19 @@ int *draw_streamlines_to_buffer(ofm_t *ofm, uint32_t particle_per_row, uint32_t 
         for (uint32_t i = 0; i < particles_count; i++) {
             particle_t *particle = particles[i];
 
-            uint32_t x = (uint32_t) particle->x;
-            uint32_t y = (uint32_t) particle->y;
+            int x = (int) floor(particle->x);
+            int y = (int) floor(particle->y);
 
-            if (x > width || y > height) continue;
+            /* bounds check: valid indices are 0..width-1 and 0..height-1 */
+            if (x < 0 || y < 0 || x >= (int) width || y >= (int) height) continue;
 
-            int buffer_index = get_index(width, height, (int) x, (int) y);
+            int buffer_index = get_index(width, height, x, y);
 
-            particle->x += (uint32_t) (u_field[buffer_index] * dt);
-            particle->y += (uint32_t) (v_field[buffer_index] * dt);
+            /* update particle using double velocities (preserve sign and fractional part) */
+            particle->x += u_field[buffer_index] * dt;
+            particle->y += v_field[buffer_index] * dt;
 
+            /* mark current location (after this step we'll mark the old location as well via floor above on next loop) */
             buffer[buffer_index] = 1;
         }
         if (a % 1000 == 0) {
@@ -190,4 +194,19 @@ void write_streamlines_to_ppm(ofm_t *ofm, int *streamlines, char *output_file) {
     fptr = NULL;
 
     return;
+}
+
+void overlay_streamlines_to_intensity_buffer(image_t *image, int *streamlines) {
+    double *intensity_buffer = image->intensity_buffer;
+    uint32_t width = image->width;
+    uint32_t height = image->height;
+
+    for (uint32_t y = 0; y < height; y++) {
+        for (uint32_t x = 0; x < width; x++) {
+            int i = get_index(width, height, (int) x, (int) y);
+            if (streamlines[i] == 0) { continue; }
+
+            intensity_buffer[i] = 1.0;
+        }
+    }
 }

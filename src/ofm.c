@@ -54,9 +54,9 @@ void ofm_free(ofm_t **ofm) {
 }
 
 double local_u(ofm_t *ofm, int x, int y) {
-    if (x < 0 || y < 0 || x >= (int) ofm->field_width - (int) ofm->weight_width || y >= (int) ofm->field_height - (int) ofm->weight_height) {
+    /*if (x < 0 || y < 0 || x >= (int) ofm->field_width - (int) ofm->weight_width || y >= (int) ofm->field_height - (int) ofm->weight_height) {
         return 0.0f;
-    }
+    }*/
 
     double out = weighted_avg(ofm->u_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x - (int) ofm->weight_width / 2, y - (int) ofm->weight_height / 2);
 
@@ -64,9 +64,9 @@ double local_u(ofm_t *ofm, int x, int y) {
 }
 
 double local_v(ofm_t *ofm, int x, int y) {
-    if (x < 0 || y < 0 || x >= (int) ofm->field_width - (int) ofm->weight_width || y >= (int) ofm->field_height - (int) ofm->weight_height) {
+    /*if (x < 0 || y < 0 || x >= (int) ofm->field_width - (int) ofm->weight_width || y >= (int) ofm->field_height - (int) ofm->weight_height) {
         return 0.0f;
-    }
+    }*/
 
     double out = weighted_avg(ofm->v_field, ofm->local_velocity_weights, ofm->field_width, ofm->field_height, ofm->weight_width, ofm->weight_height, x - (int) ofm->weight_width / 2, y - (int) ofm->weight_height / 2);
 
@@ -120,7 +120,7 @@ void iterate(ofm_t *ofm, double alpha) {
             double v_avg = local_v(ofm, x, y);
 
             frac_numerator = E_x[i] * u_avg + E_y[i] * v_avg + E_t[i];
-            frac_denominator = alpha*alpha + E_x[i]*E_x[i] + E_y[i]*E_y[i];
+            frac_denominator = alpha*alpha + E_x[i]*E_x[i] + E_y[i]*E_y[i] + 1e-9;
             frac_term = frac_numerator / frac_denominator;
 
             u_field_new[i] = u_avg - E_x[i] * frac_term;

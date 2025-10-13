@@ -39,7 +39,33 @@ void write_intensity_buffer_to_ppm(image_t *image, char *output_file);
  */
 void write_velocity_field_to_file(ofm_t *ofm, char *output_file);
 
+/**
+ * Iteratively draws streamlines by simulating particles travelling through velocity field
+ *
+ * @param ofm               pointer to ofm struct with u and v field
+ * @param particle_per_row  number of simulated particles per row
+ * @param particle_per_col  number of simulated particles per col
+ * @param steps             number of time steps into future
+ * @param dt                change in time between steps
+ *
+ * @return                  int matrix with value 0 for background and 1 for streamline
+ */
 int *draw_streamlines_to_buffer(ofm_t *ofm, uint32_t particle_per_row, uint32_t particle_per_col, uint32_t steps, double dt);
 
+/**
+ * Draws streamlines to ppm file
+ *
+ * @param ofm               pointer to ofm struct with field width and height values
+ * @param streamlines       int matrix with value 1 wherever theres a streamline
+ * @param output_file       name of output ppm file$a
+ */
 void write_streamlines_to_ppm(ofm_t *ofm, int *streamlines, char *output_file);
+
+/**
+ * Overlays the streamlines on top of intensity buffer for visualization
+ *
+ * @param image             pointer to image struct with intensity buffer and dimensions
+ * @param streamlines       int matrix with value 1 wherever there is a streamline
+ */
+void overlay_streamlines_to_intensity_buffer(image_t *image, int *streamlines);
 #endif
