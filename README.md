@@ -10,6 +10,7 @@ Purely algorithmic, no AI/ML.
  - `cd` in to `src` directory
  - Adjust Makefile as necessary
     - If you ran `make install` for LibTIFF should work out of the box
+    - Otherwise adjust `CFLAGS` command to include `-I<path/to/libTIFF/`
  - run `make clean` and `make`
  - `./main <img_before.tif> <img_after.tif> dt`
 
