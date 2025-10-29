@@ -16,7 +16,7 @@
  *                          pixel in intensity buffer **ALLOCATED IN FUNCTION
  *                          BUT MUST BE FREED BY USER**
  */
-double *intensity_partial_derivative_field(image_t *img1, image_t *img2, char dir, double dt);
+double *intensity_partial_derivative_field(image_t *img1, image_t *img2, char dir);
 
 /**
  * Calculates the partial derivative at a point in the x direction. Assumes
@@ -56,5 +56,5 @@ double intensity_d_dy_point(image_t *img1, image_t *img2, int x, int y);
  *
  * @return the partial derivative of intensity in the specified direction evaluated at (x,y)
  */
-double intensity_d_dt_point(image_t *img1, image_t *img2, int x, int y, double dt);
+double intensity_d_dt_point(image_t *img1, image_t *img2, int x, int y);
 #endif

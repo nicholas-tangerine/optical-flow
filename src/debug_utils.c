@@ -146,16 +146,13 @@ int *draw_streamlines_to_buffer(ofm_t *ofm, uint32_t particle_per_row, uint32_t 
             int x = (int) floor(particle->x);
             int y = (int) floor(particle->y);
 
-            /* bounds check: valid indices are 0..width-1 and 0..height-1 */
             if (x < 0 || y < 0 || x >= (int) width || y >= (int) height) continue;
 
             int buffer_index = get_index(width, height, x, y);
 
-            /* update particle using double velocities (preserve sign and fractional part) */
             particle->x += u_field[buffer_index] * dt;
             particle->y += v_field[buffer_index] * dt;
 
-            /* mark current location (after this step we'll mark the old location as well via floor above on next loop) */
             buffer[buffer_index] = 1;
         }
         if (a % 1000 == 0) {
@@ -175,7 +172,6 @@ int *draw_streamlines_to_buffer(ofm_t *ofm, uint32_t particle_per_row, uint32_t 
 void write_streamlines_to_ppm(ofm_t *ofm, int *streamlines, char *output_file) {
     uint32_t width = ofm->field_width;
     uint32_t height = ofm->field_height;
-    uint32_t area = ofm->field_area;
 
     FILE *fptr = fopen(output_file, "w");
 

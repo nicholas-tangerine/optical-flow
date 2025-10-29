@@ -7,10 +7,14 @@
 
 typedef struct {
     TIFF *tif;
+    char *file_name;
+
     uint32_t *color_buffer;
     double *intensity_buffer;
+
     uint32_t height;
     uint32_t width;
+
     bool read;
 
 } image_t;
@@ -50,5 +54,16 @@ image_t *image_copy(image_t *img);
  * @return true if dimensions are equal
  */
 bool image_same_dimensions(image_t *img1, image_t *img2);
+
+/**
+ * Checks if a row in an image is all black (intensities measuring under threshold).
+ *
+ * @param img                   pointer to image struct
+ * @param row                   row to check for darkness
+ * @param threshold             how bright a pixel can be before being considered not black
+ *
+ * @return true if all intensities are under threshold
+ */
+bool row_is_black(image_t *img, int row, double threshold);
 
 #endif

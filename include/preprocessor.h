@@ -44,4 +44,14 @@ void intensity_normalize(image_t *image);
  */
 void intensity_match(image_t *img1, image_t *img2);
 
+/**
+ * Cuts out the black bars at the tops and bottoms of images. Keeps both images
+ * sized and centered the same.
+ *
+ * @param img1              before image
+ * @param img2              after image
+ * @param threshold         how dark a pixel must be to be black
+ */
+void intensity_fit(image_t *img1, image_t *img2, double threshold);
+
 #endif

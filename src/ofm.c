@@ -8,13 +8,13 @@
 #include "math_helper.h"
 
 ofm_t *ofm_init(image_t *img1, image_t *img2, uint32_t width, uint32_t height) {
-    ofm_t *ofm = calloc(1, sizeof(ofm_t));
-    ofm->u_field = calloc(width * height, sizeof(double));
-    ofm->v_field = calloc(width * height, sizeof(double));
+    ofm_t *ofm = (ofm_t *)calloc(1, sizeof(ofm_t));
+    ofm->u_field = (double *)calloc(width * height, sizeof(double));
+    ofm->v_field = (double *)calloc(width * height, sizeof(double));
 
-    ofm->E_x = intensity_partial_derivative_field(img1, img2, 'x', 20.0f);
-    ofm->E_y = intensity_partial_derivative_field(img1, img2, 'y', 20.0f);
-    ofm->E_t = intensity_partial_derivative_field(img1, img2, 't', 20.0f);
+    ofm->E_x = intensity_partial_derivative_field(img1, img2, 'x');
+    ofm->E_y = intensity_partial_derivative_field(img1, img2, 'y');
+    ofm->E_t = intensity_partial_derivative_field(img1, img2, 't');
 
     double temp = 1.0f / 12.0f;
     double *weights = calloc(9, sizeof(double));

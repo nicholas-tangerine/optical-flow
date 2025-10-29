@@ -11,28 +11,31 @@
 
 #include "debug_utils.h"
 
-#define DOWNSCALE_FACTOR 2
-#define GAUSSIAN_SMOOTH_SIGMA 3
+#define DARKNESS_THRESHOLD 0.1
+
+#define DOWNSCALE_FACTOR 3
+#define GAUSSIAN_SMOOTH_SIGMA 2
 #define GAUSSIAN_SMOOTH_RADIUS (3 * GAUSSIAN_SMOOTH_SIGMA)
 
-#define H_S_ITERATIONS 1024
-#define H_S_ALPHA 2000.0
+#define H_S_ITERATIONS 91
+#define H_S_ALPHA 10.0
 
-#define STREAMLINE_ITERATIONS 75
+#define STREAMLINE_ITERATIONS 2000
 #define STREAMLINE_PARTICLES_PER_ROW 100
 #define STREAMLINE_PARTICLES_PER_COL (STREAMLINE_PARTICLES_PER_ROW / 2)
+#define STREAMLINE_ITERATIONS_DT 10.0
 
 int main(int argc, char **argv) {
     if (argc < 4) {
-        fprintf(stderr, "DEBUG: not enough params\n\n");
+        fprintf(stderr, "DEBUG: not enough params\n");
         return 1;
     }
 
-    image_t *img1 = image_init(argv[1], "r\n");
-    image_t *img2 = image_init(argv[2], "r\n");
+    image_t *img1 = image_init(argv[1], "r");
+    image_t *img2 = image_init(argv[2], "r");
 
     if (!image_same_dimensions(img1 , img2)) {
-        fprintf(stderr, "DEBUG: before and after images do not have the same dimensions\n\n");
+        fprintf(stderr, "DEBUG: before and after images do not have the same dimensions\n");
         return 1;
     }
 
@@ -53,6 +56,9 @@ int main(int argc, char **argv) {
     fprintf(stdout, "DEBUG: NORMALIZING IMAGE 2\n");
     intensity_normalize(img2);
 
+    fprintf(stdout, "DEBUG: RESIZING IMAGES\n");
+    intensity_fit(img1, img2, DARKNESS_THRESHOLD);
+
     fprintf(stdout, "DEBUG: PREPROCESSED IMAGES TO PPM\n");
     write_intensity_buffer_to_ppm(img1, "output1.ppm");
     write_intensity_buffer_to_ppm(img2, "output2.ppm");
@@ -65,6 +71,7 @@ int main(int argc, char **argv) {
 
     fprintf(stdout, "DEBUG: ITERATIVELY SOLVING HORN SCHUNK ESTIMATOR\n");
     for (int i = 0; i < H_S_ITERATIONS; i++) {
+        if (i % 30 == 0) fprintf(stdout, "DEBUG: iteration %d\n", i);
         iterate(ofm, H_S_ALPHA);
     }
 
@@ -72,18 +79,20 @@ int main(int argc, char **argv) {
     fprintf(stdout, "DEBUG: NORMALIZING VELOCITY FIELD\n");
     velocity_field_normalize(ofm);
 
-    fprintf(stdout, "DEBUG: WRITING VELO FIELD TO TXT FILE");
-    write_velocity_field_to_file(ofm, "velo field downscaled.txt");
+    /*
+    fprintf(stdout, "DEBUG: WRITING VELO FIELD TO TXT FILE\n");
+    write_velocity_field_to_file(ofm, "velo field downscaled.txt");*
+    */
 
-    fprintf(stdout, "DEBUG: GETTING STREAMLINES");
-    int *streamlines = draw_streamlines_to_buffer(ofm, STREAMLINE_PARTICLES_PER_ROW, STREAMLINE_PARTICLES_PER_COL, STREAMLINE_ITERATIONS, 10.0);
+    fprintf(stdout, "DEBUG: GETTING STREAMLINES\n");
+    int *streamlines = draw_streamlines_to_buffer(ofm, STREAMLINE_PARTICLES_PER_ROW, STREAMLINE_PARTICLES_PER_COL, STREAMLINE_ITERATIONS, STREAMLINE_ITERATIONS_DT);
     write_streamlines_to_ppm(ofm, streamlines, "streamlines.ppm");
 
-    fprintf(stdout, "DEBUG: OVERLAYING STREAMLINES");
+    fprintf(stdout, "DEBUG: OVERLAYING STREAMLINES\n");
     overlay_streamlines_to_intensity_buffer(img1, streamlines);
     overlay_streamlines_to_intensity_buffer(img2, streamlines);
 
-    fprintf(stdout, "DEBUG: WRITING OVERLAID STREAMLINES");
+    fprintf(stdout, "DEBUG: WRITING OVERLAID STREAMLINES\n");
     write_intensity_buffer_to_ppm(img1, "output1-streamlines.ppm");
     write_intensity_buffer_to_ppm(img2, "output2-streamlines.ppm");
 

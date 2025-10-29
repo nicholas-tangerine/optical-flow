@@ -58,6 +58,8 @@ image_t *image_copy(image_t *img) {
     memcpy(new->color_buffer, img->color_buffer, (size_t) color_size);
     memcpy(new->intensity_buffer, img->intensity_buffer, (size_t) intensity_size);
 
+    new->read = img->read;
+
     return new;
 }
 
@@ -69,4 +71,16 @@ bool image_same_dimensions(image_t *img1, image_t *img2) {
     width2 = img2->width;
 
     return (height1 == height2 && width1 == width2);
+}
+
+bool row_is_black(image_t *img, int row, double threshold) {
+    double *intensity_buffer = img->intensity_buffer;
+    uint32_t width = img->width;
+
+    for (int i = 0; i < (int) width; i++) {
+        int index = row * (int) width + i;
+        if (intensity_buffer[index] > threshold) return false;
+    }
+
+    return true;
 }
