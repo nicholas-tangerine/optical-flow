@@ -14,12 +14,6 @@ double weighted_avg(double *buffer, double *weights, uint32_t buffer_width, uint
             int buffer_index_x = x + (int) j;
             int buffer_index_y = y + (int) i;
 
-            buffer_index_x = buffer_index_x < 0 ? -buffer_index_x : buffer_index_x;
-            buffer_index_y = buffer_index_y < 0 ? -buffer_index_y : buffer_index_y;
-
-            buffer_index_x = buffer_index_x >= (int) buffer_width ? (int) buffer_width - (buffer_index_x - (int) buffer_width) : buffer_index_x;
-            buffer_index_y = buffer_index_y >= (int) buffer_height? (int) buffer_height- (buffer_index_y - (int) buffer_height) : buffer_index_y;
-
             int buffer_index = get_index(buffer_width, buffer_height, buffer_index_x, buffer_index_y);
 
             intensity += weights[weights_index] * buffer[buffer_index];

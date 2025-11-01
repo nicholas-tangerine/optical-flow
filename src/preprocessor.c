@@ -89,10 +89,11 @@ void intensity_normalize(image_t *image) {
     }
 
     diff = max - min;
+    if (diff <= 1e-9) return;
     for (uint32_t y = 0; y < height; y++) {
         for (uint32_t x = 0; x < width; x++) {
             uint32_t index = y * width + x;
-            buffer[index] += min;
+            buffer[index] -= min;
             buffer[index] /= diff;
         }
     }
