@@ -1,4 +1,5 @@
 # Optical Flow Method
+![progress image oct 31](./docs/images/streamlines.png "streamlines")
 Optical flow for planetary cloud tracking
 
 # Objective
