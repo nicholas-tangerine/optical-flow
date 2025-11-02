@@ -1,7 +1,6 @@
 # Optical Flow Method
 ![progress image oct 31](./docs/images/streamlines.png "streamlines")
-*extracted flow from OFM*
-Optical flow for planetary cloud tracking
+*PRELIMINARY RESULT: extracted flow from OFM* <br>
 
 # Objective
 Use two images taken $\Delta t$ apart and track the wind velocity patterns.
