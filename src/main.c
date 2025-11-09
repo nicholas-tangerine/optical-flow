@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include <math.h>
 
 #include "tiff_helpers.h"
@@ -11,9 +12,9 @@
 
 #include "debug_utils.h"
 
-#define DARKNESS_THRESHOLD 0.1
+#define DARKNESS_THRESHOLD 0.1f
 
-#define DOWNSCALE_FACTOR 1
+#define DOWNSCALE_FACTOR 3
 #define GAUSSIAN_SMOOTH_SIGMA 2
 #define GAUSSIAN_SMOOTH_RADIUS (3 * GAUSSIAN_SMOOTH_SIGMA)
 
@@ -39,34 +40,27 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    fprintf(stdout, "DEBUG: DOWNSCALING IMAGES\n");
-    intensity_downscale(img1, DOWNSCALE_FACTOR);
-    intensity_downscale(img2, DOWNSCALE_FACTOR);
+    /**
+     * PREPROCESS
+     */
+    PreprocessorConfig config = {
+        .downscale = true,
+        .match = true,
+        .smooth = true,
+        .normalize = true,
+        .fit = true,
+        .write_ppm = false,
 
-    fprintf(stdout, "DEBUG: MATCHING IMAGE INTENSITIES\n");
-    intensity_match(img1, img2);
+        .darkness_threshold = DARKNESS_THRESHOLD,
+        .scale_factor = DOWNSCALE_FACTOR,
+        .gaussian_smooth_radius = GAUSSIAN_SMOOTH_RADIUS,
+        .gaussian_smooth_sigma = GAUSSIAN_SMOOTH_SIGMA
+    };
+    preprocess(img1, img2, &config);
 
-    fprintf(stdout, "DEBUG: SMOOTHING IMAGE 1\n");
-    intensity_smooth(img1, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
-    fprintf(stdout, "DEBUG: SMOOTHING IMAGE 2\n");
-    intensity_smooth(img2, GAUSSIAN_SMOOTH_RADIUS, GAUSSIAN_SMOOTH_SIGMA);
-
-    fprintf(stdout, "DEBUG: NORMALIZING IMAGE 1\n");
-    intensity_normalize(img1);
-    fprintf(stdout, "DEBUG: NORMALIZING IMAGE 2\n");
-    intensity_normalize(img2);
-
-    fprintf(stdout, "DEBUG: RESIZING IMAGES\n");
-    intensity_fit(img1, img2, DARKNESS_THRESHOLD);
-
-    fprintf(stdout, "DEBUG: PREPROCESSED IMAGES TO PPM\n");
-    write_intensity_buffer_to_ppm(img1, "output1.ppm");
-    write_intensity_buffer_to_ppm(img2, "output2.ppm");
-
-    //double *di_dx = intensity_partial_derivative_field(img1, img2, 'x', 20.0f);
-    //double *di_dy = intensity_partial_derivative_field(img1, img2, 'y', 20.0f);
-    //double *di_dt = intensity_partial_derivative_field(img1, img2, 't', 20.0f);
-
+    /**
+     * APPLY OFM
+     */
     ofm_t *ofm = ofm_init(img1, img2, img1->width, img1->height);
 
     fprintf(stdout, "DEBUG: ITERATIVELY SOLVING HORN SCHUNK ESTIMATOR\n");
@@ -78,11 +72,6 @@ int main(int argc, char **argv) {
 
     fprintf(stdout, "DEBUG: NORMALIZING VELOCITY FIELD\n");
     velocity_field_normalize(ofm);
-
-    /*
-    fprintf(stdout, "DEBUG: WRITING VELO FIELD TO TXT FILE\n");
-    write_velocity_field_to_file(ofm, "velo field downscaled.txt");*
-    */
 
     fprintf(stdout, "DEBUG: GETTING STREAMLINES\n");
     int *streamlines = draw_streamlines_to_buffer(ofm, STREAMLINE_PARTICLES_PER_ROW, STREAMLINE_PARTICLES_PER_COL, STREAMLINE_ITERATIONS, STREAMLINE_ITERATIONS_DT);
@@ -105,10 +94,6 @@ int main(int argc, char **argv) {
 
     image_free(&img1);
     image_free(&img2);
-
-    //free(di_dx);
-    //free(di_dy);
-    //free(di_dt);
 
     return 0;
 }

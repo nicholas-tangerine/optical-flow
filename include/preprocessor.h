@@ -4,6 +4,20 @@
 #include "image.h"
 #include "tiffio.h"
 
+typedef struct {
+    bool downscale;
+    bool match;
+    bool smooth;
+    bool normalize;
+    bool fit;
+    bool write_ppm;
+
+    float darkness_threshold;
+    uint32_t scale_factor;
+    uint32_t gaussian_smooth_radius;
+    uint32_t gaussian_smooth_sigma;
+} PreprocessorConfig;
+
 /**
  * Smooths intensity buffer using gaussian blur.
  *
@@ -54,4 +68,5 @@ void intensity_match(image_t *img1, image_t *img2);
  */
 void intensity_fit(image_t *img1, image_t *img2, double threshold);
 
+void preprocess(image_t *img1, image_t *img2, PreprocessorConfig *config);
 #endif

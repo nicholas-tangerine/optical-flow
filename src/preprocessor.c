@@ -4,6 +4,7 @@
 #include <limits.h>
 
 #include "preprocessor.h"
+#include "debug_utils.h"
 #include "tiff_helpers.h"
 #include "math_helper.h"
 
@@ -163,3 +164,41 @@ void intensity_fit(image_t *img1, image_t *img2, double threshold) {
     return;
 }
 
+void preprocess(image_t *img1, image_t *img2, PreprocessorConfig *config) {
+    if (config->downscale) {
+        fprintf(stdout, "DEBUG: DOWNSCALING IMAGE 1\n");
+        intensity_downscale(img1, config->scale_factor);
+        fprintf(stdout, "DEBUG: DOWNSCALING IMAGE 2\n");
+        intensity_downscale(img2, config->scale_factor);
+    }
+
+    if (config->match) {
+        fprintf(stdout, "DEBUG: MATCHING IMAGE INTENSITIES\n");
+        intensity_match(img1, img2);
+    }
+
+    if (config->smooth) {
+        fprintf(stdout, "DEBUG: SMOOTHING IMAGE 1\n");
+        intensity_smooth(img1, config->gaussian_smooth_radius, config->gaussian_smooth_sigma);
+        fprintf(stdout, "DEBUG: SMOOTHING IMAGE 2\n");
+        intensity_smooth(img2, config->gaussian_smooth_radius, config->gaussian_smooth_sigma);
+    }
+
+    if (config->normalize) {
+        fprintf(stdout, "DEBUG: NORMALIZING IMAGE 1\n");
+        intensity_normalize(img1);
+        fprintf(stdout, "DEBUG: NORMALIZING IMAGE 2\n");
+        intensity_normalize(img2);
+    }
+
+    if (config->fit) {
+        fprintf(stdout, "DEBUG: RESIZING IMAGES\n");
+        intensity_fit(img1, img2, config->darkness_threshold);
+    }
+
+    if (config->write_ppm) {
+        fprintf(stdout, "DEBUG: PREPROCESSED IMAGES TO PPM\n");
+        write_intensity_buffer_to_ppm(img1, "output1.ppm");
+        write_intensity_buffer_to_ppm(img2, "output2.ppm");
+    }
+}
