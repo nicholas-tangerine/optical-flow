@@ -15,6 +15,9 @@ ofm_t *ofm_init(image_t *img1, image_t *img2, uint32_t width, uint32_t height) {
     ofm->u_field = (double *)calloc(width * height, sizeof(double));
     ofm->v_field = (double *)calloc(width * height, sizeof(double));
 
+    ofm->E1 = img1->intensity_buffer;
+    ofm->E2 = img2->intensity_buffer;
+
     ofm->E_x = intensity_partial_derivative_field(img1, img2, 'x');
     ofm->E_y = intensity_partial_derivative_field(img1, img2, 'y');
     ofm->E_t = intensity_partial_derivative_field(img1, img2, 't');

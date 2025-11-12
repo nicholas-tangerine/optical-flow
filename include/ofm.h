@@ -9,6 +9,8 @@ typedef struct {
     double *u_field;       //  x component velocity
     double *v_field;       //  y component velocity
 
+    double *E1, *E2;
+
     double *E_x;
     double *E_y;
     double *E_t;

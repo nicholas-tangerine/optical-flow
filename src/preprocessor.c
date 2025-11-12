@@ -129,8 +129,8 @@ void intensity_fit(image_t *img1, image_t *img2, double threshold) {
 
     for (int i = 0 ; i < height; i++) { if (row_is_black(img1, i, threshold)) continue; top1 = i; break; }
     for (int i = 0 ; i < height; i++) { if (row_is_black(img2, i, threshold)) continue; top2 = i; break; }
-    for (int i = height-2; i >= 0; i--) { if (row_is_black(img1, i, threshold)) continue; bot1 = i; break; }
-    for (int i = height-2; i >= 0; i--) { if (row_is_black(img2, i, threshold)) continue; bot2 = i; break; }
+    for (int i = height-1; i >= 0; i--) { if (row_is_black(img1, i, threshold)) continue; bot1 = i; break; }
+    for (int i = height-1; i >= 0; i--) { if (row_is_black(img2, i, threshold)) continue; bot2 = i; break; }
 
     int top = top1 > top2 ? top1 : top2;
     top = top == INT_MAX ? 0 : top;
