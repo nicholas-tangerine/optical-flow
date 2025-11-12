@@ -1,3 +1,5 @@
+#define ENABLE_DEBUG 0
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -156,7 +158,7 @@ int *draw_streamlines_to_buffer(ofm_t *ofm, uint32_t particle_per_row, uint32_t 
             buffer[buffer_index] = 1;
         }
         if (a % 1000 == 0) {
-            LOG_DEBUG("%d%% complete\n", a * 100 / steps);
+            LOG_DEBUG("DEBUG: STREAMLINE TO BUFFER IS %d%% complete\n", a * 100 / steps);
         }
     }
 

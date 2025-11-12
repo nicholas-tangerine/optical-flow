@@ -1,3 +1,5 @@
+#define ENABLE_DEBUG 0
+
 #include "filename_utils.h"
 
 #include <stdlib.h>

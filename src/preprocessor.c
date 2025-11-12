@@ -1,3 +1,5 @@
+#define ENABLE_DEBUG 0
+
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
