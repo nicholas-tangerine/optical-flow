@@ -1,3 +1,5 @@
+#define ENABLE_DEBUG
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
@@ -14,21 +16,21 @@
 
 #define DARKNESS_THRESHOLD 0.1f
 
-#define DOWNSCALE_FACTOR 3
+#define DOWNSCALE_FACTOR 4
 #define GAUSSIAN_SMOOTH_SIGMA 2
 #define GAUSSIAN_SMOOTH_RADIUS (3 * GAUSSIAN_SMOOTH_SIGMA)
 
 #define H_S_ITERATIONS 91
 #define H_S_ALPHA 10.0
 
-#define STREAMLINE_ITERATIONS 2000
-#define STREAMLINE_PARTICLES_PER_ROW 200
+#define STREAMLINE_ITERATIONS (2000 / DOWNSCALE_FACTOR)
+#define STREAMLINE_PARTICLES_PER_ROW (3600 / DOWNSCALE_FACTOR)
 #define STREAMLINE_PARTICLES_PER_COL (STREAMLINE_PARTICLES_PER_ROW / 2)
 #define STREAMLINE_ITERATIONS_DT 0.5
 
 int main(int argc, char **argv) {
     if (argc < 4) {
-        fprintf(stderr, "DEBUG: not enough params\n");
+        LOG_DEBUG("DEBUG: not enough params\n");
         return 1;
     }
 
@@ -36,7 +38,7 @@ int main(int argc, char **argv) {
     image_t *img2 = image_init(argv[2], "r");
 
     if (!image_same_dimensions(img1 , img2)) {
-        fprintf(stderr, "DEBUG: before and after images do not have the same dimensions\n");
+        LOG_DEBUG("DEBUG: before and after images do not have the same dimensions\n");
         return 1;
     }
 
@@ -62,26 +64,20 @@ int main(int argc, char **argv) {
      * APPLY OFM
      */
     ofm_t *ofm = ofm_init(img1, img2, img1->width, img1->height);
+    apply_H_S_estimator(ofm, H_S_ITERATIONS, H_S_ALPHA);
 
-    fprintf(stdout, "DEBUG: ITERATIVELY SOLVING HORN SCHUNK ESTIMATOR\n");
-    for (int i = 0; i < H_S_ITERATIONS; i++) {
-        if (i % 30 == 0) fprintf(stdout, "DEBUG: iteration %d\n", i);
-        iterate(ofm, H_S_ALPHA);
-    }
-
-
-    fprintf(stdout, "DEBUG: NORMALIZING VELOCITY FIELD\n");
+    LOG_DEBUG("DEBUG: NORMALIZING VELOCITY FIELD\n");
     velocity_field_normalize(ofm);
 
-    fprintf(stdout, "DEBUG: GETTING STREAMLINES\n");
+    LOG_DEBUG("DEBUG: GETTING STREAMLINES\n");
     int *streamlines = draw_streamlines_to_buffer(ofm, STREAMLINE_PARTICLES_PER_ROW, STREAMLINE_PARTICLES_PER_COL, STREAMLINE_ITERATIONS, STREAMLINE_ITERATIONS_DT);
     write_streamlines_to_ppm(ofm, streamlines, "streamlines.ppm");
 
-    fprintf(stdout, "DEBUG: OVERLAYING STREAMLINES\n");
+    LOG_DEBUG("DEBUG: OVERLAYING STREAMLINES\n");
     overlay_streamlines_to_intensity_buffer(img1, streamlines);
     overlay_streamlines_to_intensity_buffer(img2, streamlines);
 
-    fprintf(stdout, "DEBUG: WRITING OVERLAID STREAMLINES\n");
+    LOG_DEBUG("DEBUG: WRITING OVERLAID STREAMLINES\n");
     write_intensity_buffer_to_ppm(img1, "output1-streamlines.ppm");
     write_intensity_buffer_to_ppm(img2, "output2-streamlines.ppm");
 

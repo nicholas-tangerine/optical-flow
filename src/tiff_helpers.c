@@ -3,6 +3,7 @@
 #include "tiffio.h"
 
 #include "tiff_helpers.h"
+#include "debug_utils.h"
 
 
 void tiff_read_to_color_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uint32_t width) {
@@ -10,7 +11,7 @@ void tiff_read_to_color_buffer(TIFF *tif, uint32_t *buffer, uint32_t height, uin
             ORIENTATION_TOPLEFT, 0);
 
     if (res != 1) {
-        fprintf(stderr, "DEBUG: error reading TIFF into buffer");
+    LOG_DEBUG("DEBUG: error reading TIFF into buffer");
         return;
     }
 }
@@ -21,7 +22,7 @@ void tiff_read_to_intensity_buffer(TIFF *tif, double *buffer, uint32_t height, u
             ORIENTATION_TOPLEFT, 0);
 
     if (res != 1) {
-        fprintf(stderr, "DEBUG: error reading TIFF into temp buffer\n");
+    LOG_DEBUG("DEBUG: error reading TIFF into temp buffer\n");
         return;
     }
 
@@ -57,7 +58,7 @@ uint32_t tiff_get_height(TIFF *tif) {
 
     if (res == 1) return height;
 
-    fprintf(stderr, "DEBUG: couldn't get TIFF height\n");
+    LOG_DEBUG("DEBUG: couldn't get TIFF height\n");
     return height;
 }
 
@@ -68,6 +69,6 @@ uint32_t tiff_get_width(TIFF *tif) {
 
     if (res == 1) return width;
 
-    fprintf(stderr, "DEBUG: couldn't get TIFF width\n");
+    LOG_DEBUG("DEBUG: couldn't get TIFF width\n");
     return width;
 }

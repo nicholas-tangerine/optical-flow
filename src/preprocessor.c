@@ -104,8 +104,7 @@ void intensity_match(image_t *img1, image_t *img2) {
     uint32_t buffer_len = img1->width * img1->height;
     uint32_t temp = img2->width * img2->height;
 
-    if (buffer_len != temp) fprintf(stderr, "DEBUG: intensity_match: img1 and "
-            "img2 are different sizes\n");
+    if (buffer_len != temp) LOG_DEBUG("DEBUG: intensity_match: img1 and img2 are different sizes\n");
 
     double avg1 = average_val(img1->intensity_buffer, buffer_len);
     double avg2 = average_val(img2->intensity_buffer, buffer_len);
@@ -166,38 +165,38 @@ void intensity_fit(image_t *img1, image_t *img2, double threshold) {
 
 void preprocess(image_t *img1, image_t *img2, PreprocessorConfig *config) {
     if (config->downscale) {
-        fprintf(stdout, "DEBUG: DOWNSCALING IMAGE 1\n");
+        LOG_DEBUG("DEBUG: DOWNSCALING IMAGE 1\n");
         intensity_downscale(img1, config->scale_factor);
-        fprintf(stdout, "DEBUG: DOWNSCALING IMAGE 2\n");
+        LOG_DEBUG("DEBUG: DOWNSCALING IMAGE 2\n");
         intensity_downscale(img2, config->scale_factor);
     }
 
     if (config->match) {
-        fprintf(stdout, "DEBUG: MATCHING IMAGE INTENSITIES\n");
+        LOG_DEBUG("DEBUG: MATCHING IMAGE INTENSITIES\n");
         intensity_match(img1, img2);
     }
 
     if (config->smooth) {
-        fprintf(stdout, "DEBUG: SMOOTHING IMAGE 1\n");
+        LOG_DEBUG("DEBUG: SMOOTHING IMAGE 1\n");
         intensity_smooth(img1, config->gaussian_smooth_radius, config->gaussian_smooth_sigma);
-        fprintf(stdout, "DEBUG: SMOOTHING IMAGE 2\n");
+        LOG_DEBUG("DEBUG: SMOOTHING IMAGE 2\n");
         intensity_smooth(img2, config->gaussian_smooth_radius, config->gaussian_smooth_sigma);
     }
 
     if (config->normalize) {
-        fprintf(stdout, "DEBUG: NORMALIZING IMAGE 1\n");
+        LOG_DEBUG("DEBUG: NORMALIZING IMAGE 1\n");
         intensity_normalize(img1);
-        fprintf(stdout, "DEBUG: NORMALIZING IMAGE 2\n");
+        LOG_DEBUG("DEBUG: NORMALIZING IMAGE 2\n");
         intensity_normalize(img2);
     }
 
     if (config->fit) {
-        fprintf(stdout, "DEBUG: RESIZING IMAGES\n");
+        LOG_DEBUG("DEBUG: RESIZING IMAGES\n");
         intensity_fit(img1, img2, config->darkness_threshold);
     }
 
     if (config->write_ppm) {
-        fprintf(stdout, "DEBUG: PREPROCESSED IMAGES TO PPM\n");
+        LOG_DEBUG("DEBUG: PREPROCESSED IMAGES TO PPM\n");
         write_intensity_buffer_to_ppm(img1, "output1.ppm");
         write_intensity_buffer_to_ppm(img2, "output2.ppm");
     }

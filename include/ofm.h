@@ -74,5 +74,7 @@ void velocity_field_normalize(ofm_t *ofm);
  *
  * @param ofm           ofm struct
  */
-void iterate(ofm_t *ofm, double alpha);
+void iterate_H_S(ofm_t *ofm, double alpha);
+
+void apply_H_S_estimator(ofm_t *ofm, uint32_t iterations, double alpha);
 #endif

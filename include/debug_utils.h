@@ -1,8 +1,17 @@
+/* Lightweight debug macro control. Define ENABLE_DEBUG at compile time to enable debug prints. */
 #ifndef DEBUG_UTILS_H
 #define DEBUG_UTILS_H
 
+#include <stdio.h>
+
 #include "image.h"
 #include "ofm.h"
+
+#ifdef ENABLE_DEBUG
+#  define LOG_DEBUG(fmt, ...) fprintf(stderr, fmt, ##__VA_ARGS__)
+#else
+#  define LOG_DEBUG(fmt, ...) ((void)0)
+#endif /* ENABLE_DEBUG */
 
 /**
  * Writes color buffer to output_file (default: output.ppm); assumes buffer is rgba

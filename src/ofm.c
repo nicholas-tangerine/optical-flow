@@ -6,6 +6,7 @@
 #include "ofm.h"
 #include "ofm_helper.h"
 #include "math_helper.h"
+#include "debug_utils.h"
 
 ofm_t *ofm_init(image_t *img1, image_t *img2, uint32_t width, uint32_t height) {
     ofm_t *ofm = (ofm_t *)calloc(1, sizeof(ofm_t));
@@ -95,7 +96,7 @@ void velocity_field_normalize(ofm_t *ofm) {
     }
 }
 
-void iterate(ofm_t *ofm, double alpha) {
+void iterate_H_S(ofm_t *ofm, double alpha) {
     double *E_x = ofm->E_x;
     double *E_y = ofm->E_y;
     double *E_t = ofm->E_t;
@@ -133,4 +134,12 @@ void iterate(ofm_t *ofm, double alpha) {
 
     ofm->u_field = u_field_new;
     ofm->v_field = v_field_new;
+}
+
+void apply_H_S_estimator(ofm_t *ofm, uint32_t iterations, double alpha) {
+    LOG_DEBUG("DEBUG: ITERATIVELY SOLVING HORN SCHUNK ESTIMATOR\n");
+    for (int i = 0; i < (int) iterations; i++) {
+        if (i % 30 == 0) LOG_DEBUG("DEBUG: iteration %d\n", i);
+        iterate_H_S(ofm, alpha);
+    }
 }

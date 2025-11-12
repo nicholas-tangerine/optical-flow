@@ -3,10 +3,11 @@
 
 #include "ofm_helper.h"
 #include "math_helper.h"
+#include "debug_utils.h"
 
 double *intensity_partial_derivative_field(image_t *img1, image_t *img2, char dir) {
     if (!image_same_dimensions(img1, img2)) {
-        fprintf(stderr, "img1 and img2 do not have the same dimensions");
+    LOG_DEBUG("DEBUG: img1 and img2 do not have the same dimensions\n");
         exit(1);
     }
 

@@ -19,7 +19,7 @@ void write_color_buffer_to_ppm(image_t *image, char *output_file) {
 
     FILE *fp = fopen(output_file, "wb");
     if (fp == NULL) {
-        fprintf(stderr, "DEBUG: error opening file\n");
+        LOG_DEBUG("DEBUG: error opening file\n");
         return;
     }
 
@@ -62,7 +62,7 @@ void write_intensity_buffer_to_ppm(image_t *image, char *output_file) {
 
     FILE *fp = fopen(output_file, "wb");
     if (fp == NULL) {
-        fprintf(stderr, "DEBUG: error opening file\n");
+        LOG_DEBUG("DEBUG: error opening file\n");
         return;
     }
 
@@ -95,7 +95,7 @@ void write_velocity_field_to_file(ofm_t *ofm, char *output_file) {
 
     FILE *fptr = fopen(output_file, "w");
     if (fptr == NULL) {
-        fprintf(stderr, "DEBUG: couldn't open velo_field.txt\n");
+        LOG_DEBUG("DEBUG: couldn't open velo_field.txt\n");
         height = 0;
         width = 0;
     }
@@ -156,7 +156,7 @@ int *draw_streamlines_to_buffer(ofm_t *ofm, uint32_t particle_per_row, uint32_t 
             buffer[buffer_index] = 1;
         }
         if (a % 1000 == 0) {
-            printf("%d%% complete\n", a * 100 / steps);
+            LOG_DEBUG("%d%% complete\n", a * 100 / steps);
         }
     }
 

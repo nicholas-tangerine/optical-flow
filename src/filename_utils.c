@@ -3,12 +3,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "debug_utils.h"
 
 char *get_output_name(char *input_name) {
     char *extension = strrchr(input_name, '.');
 
     if (strcmp(extension, ".tif") != 0) {
-        fprintf(stderr, "DEBUG: unrecognized file, must be .tif\n");
+    LOG_DEBUG("DEBUG: unrecognized file, must be .tif\n");
         return "";
     }
 
@@ -18,7 +19,7 @@ char *get_output_name(char *input_name) {
     char *output = calloc((size_t) base_len + (size_t) strlen(suffix) + (size_t) 1,
             sizeof(char));
     if (output == NULL) {
-        fprintf(stderr, "DEBUG: couldn't allocate space for new filename\n");
+    LOG_DEBUG("DEBUG: couldn't allocate space for new filename\n");
         return "";
     }
     strncpy(output, input_name, (size_t) base_len);

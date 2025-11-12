@@ -3,6 +3,7 @@
 
 #include "image.h"
 #include "tiff_helpers.h"
+#include "debug_utils.h"
 
 image_t *image_init(char *file_name, char *mode) {
     //  Allocate img
@@ -25,7 +26,7 @@ image_t *image_init(char *file_name, char *mode) {
 
 void image_free(image_t **img) {
     if (!(*img)->read) {
-        fprintf(stderr, "DEBUG: freeing a write file. use image_flush instead\n");
+        LOG_DEBUG("DEBUG: freeing a write file. use image_flush instead\n");
     }
     TIFFClose((*img)->tif);
 
