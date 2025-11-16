@@ -12,7 +12,9 @@ typedef struct {
     bool fit;
     bool write_ppm;
 
-    float darkness_threshold;
+    uint32_t match_radius;
+    double match_sigma;
+    double darkness_threshold;
     uint32_t scale_factor;
     uint32_t gaussian_smooth_radius;
     uint32_t gaussian_smooth_sigma;
@@ -32,8 +34,9 @@ void intensity_smooth(image_t *image, uint32_t radius, double sigma);
 /**
  * Scales the provided image down by the specified factor.
  *
- * The image will be scaled in-place. The intensity buffer structure of the provided image will
- * not be realloc'ed, but the width and height will be set to the scaled versions.
+ * The image will be scaled in-place. The intensity buffer structure of the
+ * provided image will not be realloc'ed, but the width and height will be set
+ * to the scaled versions.
  *
  * @param image         The image to scale down.
  * @param scale_factor  The factor by which to scale the image.
@@ -56,7 +59,7 @@ void intensity_normalize(image_t *image);
  * @param img1
  * @param img2
  */
-void intensity_match(image_t *img1, image_t *img2);
+void intensity_match(image_t *img1, image_t *img2, uint32_t radius, double sigma);
 
 /**
  * Cuts out the black bars at the tops and bottoms of images. Keeps both images
@@ -68,5 +71,14 @@ void intensity_match(image_t *img1, image_t *img2);
  */
 void intensity_fit(image_t *img1, image_t *img2, double threshold);
 
+/**
+ * Preprocessing on both img1 and img2. preprocessing steps are performed based
+ * on the flags enabled in config
+ *
+ * @param img1              before image
+ * @param img2              after image
+ * @param config            PreprocessorConfig used to indicate what
+ *                          preprocessing steps should be taken
+ */
 void preprocess(image_t *img1, image_t *img2, PreprocessorConfig *config);
 #endif

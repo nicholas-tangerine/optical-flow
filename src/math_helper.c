@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
 #include "math_helper.h"
 
@@ -85,15 +86,24 @@ int get_index(uint32_t width, uint32_t height, int x, int y) {
     return y * (int) width + x;
 }
 
-//  TODO: actually implement
 double *difference_of_gaussians_2d(double *buffer1, double *buffer2, uint32_t width, uint32_t height, uint32_t radius, double sigma) {
-    (void) buffer1;
-    (void) buffer2;
+    double *diff = calloc(width * height, sizeof(double));
+    for (int i = 0; i < (int) (width * height); i++) diff[i] = buffer2[i] - buffer1[i];
+
     uint32_t side_len = 2 * radius + 1;
 
     double *out = calloc(width * height, sizeof(double));
     double *weights = calloc(side_len * side_len, sizeof(double));
-    gaussian_dist_2d(weights, side_len, sigma);
+    gaussian_dist_2d(weights, radius, sigma);
+
+    for (int y = 0; y < (int) height - 2; y++) {
+        for (int x = 0; x < (int) width - 2; x++) {
+            double center_intensity = weighted_avg(diff, weights, width, height, side_len, side_len, x, y);
+            int index = get_index(width, height, x + ((int) radius >> 1), y + ((int) radius >> 1));
+
+            out[index] = center_intensity;
+        }
+    }
 
     return out;
 }

@@ -139,7 +139,7 @@ int *draw_streamlines_to_buffer(ofm_t *ofm, uint32_t particle_per_row, uint32_t 
             particles_index++;
         }
     }
-    
+
 
     for (uint32_t a = 0; a < steps; a++) {
         for (uint32_t i = 0; i < particles_count; i++) {
@@ -206,5 +206,29 @@ void overlay_streamlines_to_intensity_buffer(image_t *image, int *streamlines) {
 
             intensity_buffer[i] = 1.0;
         }
+    }
+}
+
+void write_ppms(ofm_t *ofm, image_t *img1, image_t *img2, WritePPMConfig *config) {
+    LOG_DEBUG("DEBUG: NORMALIZING VELOCITY FIELD\n");
+    velocity_field_normalize(ofm);
+
+    LOG_DEBUG("DEBUG: GETTING STREAMLINES\n");
+    int *streamlines = draw_streamlines_to_buffer(ofm, config->streamline_particles_per_row, config->streamline_particles_per_col, config->streamline_iterations, config->streamline_iterations_dt);
+
+    if (config->streamlines_only) {
+        write_streamlines_to_ppm(ofm, streamlines, "streamlines.ppm");
+    }
+
+    if (config->streamlines_overlay) {
+        LOG_DEBUG("DEBUG: OVERLAYING STREAMLINES\n");
+        overlay_streamlines_to_intensity_buffer(img1, streamlines);
+        overlay_streamlines_to_intensity_buffer(img2, streamlines);
+    }
+
+    if (config->preprocessed_output) {
+        LOG_DEBUG("DEBUG: WRITING OVERLAID STREAMLINES\n");
+        write_intensity_buffer_to_ppm(img1, "output1-streamlines.ppm");
+        write_intensity_buffer_to_ppm(img2, "output2-streamlines.ppm");
     }
 }

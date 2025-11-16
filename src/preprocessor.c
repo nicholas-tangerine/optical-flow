@@ -102,11 +102,17 @@ void intensity_normalize(image_t *image) {
     }
 }
 
-void intensity_match(image_t *img1, image_t *img2) {
+void intensity_match(image_t *img1, image_t *img2, uint32_t radius, double sigma) {
     uint32_t buffer_len = img1->width * img1->height;
     uint32_t temp = img2->width * img2->height;
 
     if (buffer_len != temp) LOG_DEBUG("DEBUG: intensity_match: img1 and img2 are different sizes\n");
+
+    uint32_t width = img1->width;
+    uint32_t height = img1->height;
+
+    double *diff = difference_of_gaussians_2d(img1->intensity_buffer, img2->intensity_buffer, width, height, radius, sigma);
+    for (int i = 0; i < (int) (width * height); i++) { img1->intensity_buffer[i] += diff[i]; }
 
     double avg1 = average_val(img1->intensity_buffer, buffer_len);
     double avg2 = average_val(img2->intensity_buffer, buffer_len);
@@ -166,6 +172,10 @@ void intensity_fit(image_t *img1, image_t *img2, double threshold) {
 }
 
 void preprocess(image_t *img1, image_t *img2, PreprocessorConfig *config) {
+    if (!image_same_dimensions(img1 , img2)) {
+        LOG_DEBUG("DEBUG: before and after images do not have the same dimensions\n");
+        exit(1);
+    }
     if (config->downscale) {
         LOG_DEBUG("DEBUG: DOWNSCALING IMAGE 1\n");
         intensity_downscale(img1, config->scale_factor);
@@ -175,7 +185,7 @@ void preprocess(image_t *img1, image_t *img2, PreprocessorConfig *config) {
 
     if (config->match) {
         LOG_DEBUG("DEBUG: MATCHING IMAGE INTENSITIES\n");
-        intensity_match(img1, img2);
+        intensity_match(img1, img2, config->match_radius, config->match_sigma);
     }
 
     if (config->smooth) {

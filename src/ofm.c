@@ -118,8 +118,8 @@ void iterate_H_S(ofm_t *ofm, double alpha) {
     double frac_numerator;
     double frac_denominator;
     double frac_term;
-    for (int y = 0; y < (int) ofm->field_height; y++) {
-        for (int x = 0; x < (int) ofm->field_width; x++) {
+    for (int y = 1; y < (int) ofm->field_height-1; y++) {
+        for (int x = 1; x < (int) ofm->field_width-1; x++) {
             int i = get_index(ofm->field_width, ofm->field_height, x, y);
 
             double u_avg = local_u(ofm, x, y);
